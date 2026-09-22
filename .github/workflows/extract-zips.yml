@@ -1,0 +1,27 @@
+name: Extract zips into repo
+on:
+  push:
+    paths: ["*.zip"]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          for f in *.zip; do
+            [ -f "$f" ] || continue
+            name="${f%.zip}"
+            mkdir -p "$name"
+            unzip -o "$f" -d "$name"
+            rm -f "$f"
+          done
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Extract zips" || echo "nothing to commit"
+          git push
+      
