@@ -28,7 +28,8 @@ declare global {
 }
 
 function createClient(): PrismaClient {
-  const adapter = new PrismaPg({ connectionString: config.databaseUrl });
+  const pool = new Pool({ connectionString: config.databaseUrl });
+  const adapter = new PrismaPg(pool);
   return new PrismaClient({
     adapter,
     log: ["error", "warn"],
