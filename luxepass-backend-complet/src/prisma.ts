@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { config } from "./config";
-
+import { Pool } from "pg";
 // ─────────────────────────────────────────────────────────────
 // Client Prisma singleton — CORRECTIF COMPATIBILITÉ TERMUX : le moteur
 // binaire natif de Prisma (Rust, .so) est compilé pour Linux glibc et ne
