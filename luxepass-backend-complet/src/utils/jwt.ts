@@ -55,7 +55,7 @@ export interface StreamTokenPayload {
 export function signStreamToken(payload: Omit<StreamTokenPayload, "type">) {
   return jwt.sign({ ...payload, type: "stream_session" }, config.stream.sessionSecret, {
     expiresIn: config.stream.sessionTtl,
-  });
+  }as jwt.SignOptions);
 }
 
 export function verifyStreamToken(token: string): StreamTokenPayload {
@@ -71,13 +71,13 @@ export function verifyStreamToken(token: string): StreamTokenPayload {
 export function signStaffAccessToken(payload: Omit<StaffAccessPayload, "type">) {
   return jwt.sign({ ...payload, type: "access" }, config.jwt.accessSecret, {
     expiresIn: config.jwt.accessTtl,
-  });
+  }as jwt.SignOptions);
 }
 
 export function signStaffRefreshToken(payload: Omit<StaffRefreshPayload, "type">) {
   return jwt.sign({ ...payload, type: "refresh" }, config.jwt.refreshSecret, {
     expiresIn: config.jwt.refreshTtl,
-  });
+  }as jwt.SignOptions);
 }
 
 export function verifyStaffAccessToken(token: string): StaffAccessPayload {
@@ -103,7 +103,7 @@ export function signCheckinSessionToken(
     { ...payload, type: "checkin_session" },
     config.checkin.sessionSecret,
     { expiresIn: config.checkin.sessionTtl }
-  );
+  )as jwt.SignOptions;
 }
 
 export function verifyCheckinSessionToken(token: string): CheckinSessionPayload {
