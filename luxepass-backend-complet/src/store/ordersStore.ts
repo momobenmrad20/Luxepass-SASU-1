@@ -34,7 +34,7 @@ export const ordersStore = {
     const total = items.reduce((sum, i) => sum + i.price * i.qty, 0);
     return prisma.order.create({
       data: { id: `ord_${nanoid(14)}`, stayId, hotelId, room, category, items, total },
-    }) as Promise<OrderRecord>;
+    }) as unknown as Promise<OrderRecord>;
   },
 
   async listByStay(stayId: string): Promise<OrderRecord[]> {
