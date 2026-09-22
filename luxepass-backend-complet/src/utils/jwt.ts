@@ -100,10 +100,10 @@ export function signCheckinSessionToken(
   payload: Omit<CheckinSessionPayload, "type">
 ) {
   return jwt.sign(
-    { ...payload, type: "checkin_session" },
-    config.checkin.sessionSecret,
-    { expiresIn: config.checkin.sessionTtl }
-  )as jwt.SignOptions;
+  { ...payload, type: "checkin_session" },
+  config.checkin.sessionSecret,
+  { expiresIn: config.checkin.sessionTtl } as jwt.SignOptions
+);
 }
 
 export function verifyCheckinSessionToken(token: string): CheckinSessionPayload {
