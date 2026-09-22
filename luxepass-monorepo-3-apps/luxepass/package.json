@@ -1,0 +1,31 @@
+{
+  "name": "luxepass-monorepo",
+  "private": true,
+  "version": "0.0.1",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:client": "npm run dev --workspace=apps/client",
+    "dev:pms": "npm run dev --workspace=apps/pms",
+    "dev:admin": "npm run dev --workspace=apps/admin",
+    "build:client": "npm run build --workspace=apps/client",
+    "build:pms": "npm run build --workspace=apps/pms",
+    "build:admin": "npm run build --workspace=apps/admin",
+    "build:all": "npm run build --workspace=apps/client && npm run build --workspace=apps/pms && npm run build --workspace=apps/admin",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "lucide-react": "^0.383.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.2.1",
+    "vite": "^5.2.0",
+    "typescript": "^5.5.0",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0"
+  }
+}

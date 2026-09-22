@@ -1,0 +1,239 @@
+// ═════════════════════════════════════════════════════════════
+// LuxePass — Schéma Prisma / Postgres (migration Phase 1)
+// Remplace les stores in-memory. Les noms de champs et de types
+// reprennent volontairement ceux des interfaces TypeScript des
+// anciens stores (src/store/*.ts) pour limiter les changements
+// dans le reste du code métier.
+// ═════════════════════════════════════════════════════════════
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider  = "postgresql"
+  // DATABASE_URL : connexion "Transaction pooler" (port 6543, pgbouncer=true)
+  // — utilisée à l'exécution par l'app (beaucoup de connexions courtes).
+  url       = env("DATABASE_URL")
+  // DIRECT_URL : connexion directe (port 5432, sans pooler) — utilisée
+  // uniquement par `prisma migrate` / `prisma db push`. Le pooler Supabase
+  // en mode "transaction" ne supporte pas le protocole des migrations.
+  directUrl = env("DIRECT_URL")
+}
+
+enum StaffRole {
+  reception
+  gm
+  housekeeping
+  maintenance
+  super_admin
+}
+
+enum CheckinStage {
+  started
+  scanned
+  guest_data
+  signed
+  paid
+  completed
+  checked_out
+}
+
+// Cycle de vie d'un paiement en ligne (PaymentIntent). PENDING → PAID est
+// atomique côté webhook ; FAILED n'est PAS terminal (le client peut retenter
+// avec une autre carte sur le même PaymentIntent → PAID plus tard), mais
+// PAID l'est : un webhook tardif ou rejoué ne rétrograde jamais un paiement
+// encaissé (cf. services/paymentService.ts).
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+}
+
+model Hotel {
+  id    String @id
+  slug  String @unique
+  name  String
+
+  staff           Staff[]
+  checkinSessions CheckinSession[]
+  orders          Order[]
+  payments        Payment[]
+  serviceRequests ServiceRequest[]
+  maintenance     MaintenanceReport[]
+  notes           Note[]
+  pmsState        PmsState?
+
+  @@map("hotels")
+}
+
+model Staff {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  passwordHash String
+  hotelId      String
+  hotel        Hotel     @relation(fields: [hotelId], references: [id], onDelete: Cascade)
+  role         StaffRole
+  name         String?
+  tokenVersion Int       @default(0)
+  createdAt    DateTime  @default(now())
+
+  @@index([hotelId])
+  @@map("staff")
+}
+
+// ─────────────────────────────────────────────────────────────
+// Une session de check-in porte les données d'identité du client
+// (guestData, children, signatureDataUrl) — données personnelles
+// sensibles au sens RGPD. Voir prisma/README-RETENTION.md pour la
+// politique de purge à appliquer une fois en production.
+// ─────────────────────────────────────────────────────────────
+model CheckinSession {
+  id        String       @id @default(cuid())
+  hotelId   String
+  hotel     Hotel        @relation(fields: [hotelId], references: [id], onDelete: Cascade)
+  hotelSlug String
+  stage     CheckinStage @default(started)
+
+  // Anciennement GuestDataInput / StayChildInput / PaymentMethodInput —
+  // stockés en JSON pour coller au contrat Zod existant sans dupliquer
+  // chaque champ en colonne. Peut être normalisé plus tard si besoin de
+  // requêter dessus plus finement (au-delà de l'index sur "arrival" ci-dessous).
+  guestData        Json?
+  children         Json?
+  signatureDataUrl String? @db.Text
+  paymentMethod    Json?
+
+  room       String?
+  // Identifiant opaque remis au client (QR) une fois le check-in terminé —
+  // sert de clé de référence pour les commandes, demandes de service, etc.
+  stayId     String?   @unique
+  pmsSynced  Boolean   @default(false)
+  createdAt  DateTime  @default(now())
+  completedAt DateTime?
+
+  @@index([hotelId, stage])
+  @@map("checkin_sessions")
+}
+
+model Order {
+  id        String   @id @default(cuid())
+  stayId    String
+  hotelId   String
+  hotel     Hotel    @relation(fields: [hotelId], references: [id], onDelete: Cascade)
+  room      String?
+  category  String
+  items     Json
+  total     Float
+  status    String   @default("pending")
+  // Renseigné quand la commande a été RÉGLÉE EN LIGNE (PaymentIntent) : elle
+  // ne doit alors plus être refacturée sur la carte du séjour au checkout.
+  // Null = commande à facturer sur le folio (flux historique).
+  paymentId String?  @unique
+  payment   Payment? @relation(fields: [paymentId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@index([stayId])
+  @@index([hotelId])
+  @@map("orders")
+}
+
+// ─────────────────────────────────────────────────────────────
+// Paiement en ligne — un enregistrement par PaymentIntent.
+// AUCUNE donnée de carte brute (PAN, CVV, expiration) : elles ne transitent
+// que entre le navigateur et le PSP (Stripe Elements). On ne garde que la
+// marque et les 4 derniers chiffres, renvoyés par le PSP (autorisés PCI-DSS).
+// Montants en unités MINEURES entières (TND : millimes, 22 DT = 22000).
+// `items` est un instantané tarifé côté serveur : [{ id, name, qty, unitAmount }].
+// onDelete: Restrict — un enregistrement financier ne disparaît pas en
+// cascade avec la suppression d'un hôtel.
+// ─────────────────────────────────────────────────────────────
+model Payment {
+  id                    String        @id // pay_… (déterministe si Idempotency-Key fournie)
+  stayId                String
+  hotelId               String
+  hotel                 Hotel         @relation(fields: [hotelId], references: [id], onDelete: Restrict)
+  provider              String        @default("stripe")
+  providerTransactionId String        @unique // PaymentIntent.id (pi_…)
+  status                PaymentStatus @default(PENDING)
+  category              String // room_service | spa
+  items                 Json
+  amount                Int
+  currency              String // ISO 4217 minuscule (tnd)
+  paymentMethodType     String? // card | apple_pay | google_pay… (renseigné par le webhook)
+  cardBrand             String?
+  cardLast4             String?
+  failureCode           String?
+  failureMessage        String?
+  paidAt                DateTime?
+  createdAt             DateTime      @default(now())
+  updatedAt             DateTime      @updatedAt
+  order                 Order?
+
+  @@index([stayId])
+  @@index([hotelId, status])
+  @@map("payments")
+}
+
+model ServiceRequest {
+  id        String   @id @default(cuid())
+  stayId    String
+  hotelId   String
+  hotel     Hotel    @relation(fields: [hotelId], references: [id], onDelete: Cascade)
+  room      String?
+  req       String
+  priority  String   @default("MED")
+  price     Float    @default(0)
+  status    String   @default("pending")
+  sentiment String?
+  createdAt DateTime @default(now())
+
+  @@index([stayId])
+  @@index([hotelId])
+  @@map("service_requests")
+}
+
+model MaintenanceReport {
+  id        String   @id @default(cuid())
+  stayId    String
+  hotelId   String
+  hotel     Hotel    @relation(fields: [hotelId], references: [id], onDelete: Cascade)
+  room      String?
+  issue     String
+  equipment String?
+  priority  String   @default("HIGH")
+  status    String   @default("pending")
+  ticket    String
+  createdAt DateTime @default(now())
+
+  @@index([stayId])
+  @@index([hotelId])
+  @@map("maintenance_reports")
+}
+
+model Note {
+  id        String   @id @default(cuid())
+  stayId    String
+  hotelId   String
+  hotel     Hotel    @relation(fields: [hotelId], references: [id], onDelete: Cascade)
+  room      String?
+  text      String
+  createdAt DateTime @default(now())
+
+  @@index([stayId])
+  @@index([hotelId])
+  @@map("notes")
+}
+
+// État partagé des modules PMS sans modèle dédié pour l'instant
+// (reservations, yield, CRM, smart locks, etc. — voir l'ancien
+// pmsStateStore.ts pour la liste complète des clés).
+model PmsState {
+  hotelId   String   @id
+  hotel     Hotel    @relation(fields: [hotelId], references: [id], onDelete: Cascade)
+  state     Json     @default("{}")
+  updatedAt DateTime @updatedAt
+
+  @@map("pms_state")
+}

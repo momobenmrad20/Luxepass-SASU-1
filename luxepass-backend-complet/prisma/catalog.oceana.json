@@ -1,0 +1,1166 @@
+{
+  "menu": [
+    {
+      "id": "m1",
+      "name": "Salade Tunisienne Mechouia",
+      "price": 22,
+      "cat": "Entrées",
+      "active": true
+    },
+    {
+      "id": "m2",
+      "name": "Bruschetta Trio",
+      "price": 28,
+      "cat": "Entrées",
+      "active": true
+    },
+    {
+      "id": "m3",
+      "name": "Carpaccio de Daurade",
+      "price": 35,
+      "cat": "Entrées",
+      "active": true
+    },
+    {
+      "id": "m4",
+      "name": "Brick à l'Œuf",
+      "price": 18,
+      "cat": "Entrées",
+      "active": true
+    },
+    {
+      "id": "m5",
+      "name": "Tajine Royale",
+      "price": 58,
+      "cat": "Plats",
+      "active": true
+    },
+    {
+      "id": "m6",
+      "name": "Homard Thermidor",
+      "price": 145,
+      "cat": "Plats",
+      "active": true
+    },
+    {
+      "id": "m7",
+      "name": "Loup de Mer Grillé",
+      "price": 78,
+      "cat": "Plats",
+      "active": true
+    },
+    {
+      "id": "m8",
+      "name": "Couscous Royal",
+      "price": 52,
+      "cat": "Plats",
+      "active": true
+    },
+    {
+      "id": "m9",
+      "name": "Filet de Bœuf Angus",
+      "price": 98,
+      "cat": "Plats",
+      "active": true
+    },
+    {
+      "id": "m10",
+      "name": "Poulet Rôti aux Épices",
+      "price": 48,
+      "cat": "Plats",
+      "active": true
+    },
+    {
+      "id": "m11",
+      "name": "Sushi Omakase",
+      "price": 95,
+      "cat": "Plats",
+      "active": true
+    },
+    {
+      "id": "m12",
+      "name": "Pizza Quatre Fromages",
+      "price": 40,
+      "cat": "Pizzas & Pâtes",
+      "active": true
+    },
+    {
+      "id": "m13",
+      "name": "Pizza Prosciutto e Funghi",
+      "price": 42,
+      "cat": "Pizzas & Pâtes",
+      "active": true
+    },
+    {
+      "id": "m14",
+      "name": "Tagliatelles aux Fruits de Mer",
+      "price": 55,
+      "cat": "Pizzas & Pâtes",
+      "active": true
+    },
+    {
+      "id": "m15",
+      "name": "Risotto aux Champignons",
+      "price": 45,
+      "cat": "Pizzas & Pâtes",
+      "active": true
+    },
+    {
+      "id": "m16",
+      "name": "Fondant Beklawa",
+      "price": 24,
+      "cat": "Desserts",
+      "active": true
+    },
+    {
+      "id": "m17",
+      "name": "Tiramisu Maison",
+      "price": 22,
+      "cat": "Desserts",
+      "active": true
+    },
+    {
+      "id": "m18",
+      "name": "Assiette de Fruits Frais",
+      "price": 18,
+      "cat": "Desserts",
+      "active": true
+    },
+    {
+      "id": "m19",
+      "name": "Fondant au Chocolat",
+      "price": 26,
+      "cat": "Desserts",
+      "active": true
+    },
+    {
+      "id": "m20",
+      "name": "Café Turc Royal",
+      "price": 18,
+      "cat": "Boissons Chaudes",
+      "active": true
+    },
+    {
+      "id": "m21",
+      "name": "Thé à la Menthe",
+      "price": 14,
+      "cat": "Boissons Chaudes",
+      "active": true
+    },
+    {
+      "id": "m22",
+      "name": "Cappuccino Italien",
+      "price": 16,
+      "cat": "Boissons Chaudes",
+      "active": true
+    },
+    {
+      "id": "m23",
+      "name": "Jus d'Orange Pressé",
+      "price": 15,
+      "cat": "Boissons Fraîches",
+      "active": true
+    },
+    {
+      "id": "m24",
+      "name": "Limonade à la Menthe",
+      "price": 14,
+      "cat": "Boissons Fraîches",
+      "active": true
+    },
+    {
+      "id": "m25",
+      "name": "Cocktail Prestige",
+      "price": 32,
+      "cat": "Cocktails & Bar",
+      "active": true
+    },
+    {
+      "id": "m26",
+      "name": "Mojito Royal",
+      "price": 30,
+      "cat": "Cocktails & Bar",
+      "active": true
+    }
+  ],
+  "services": [
+    {
+      "id": "sv1",
+      "name": "KO-BI-DO Jeunesse instantanée",
+      "category": "Spa — Visage Cinq Mondes",
+      "type": "interne",
+      "provider": "",
+      "price": 120,
+      "duration": "20min",
+      "active": true
+    },
+    {
+      "id": "sv2",
+      "name": "KO-BI-DO Re-densification",
+      "category": "Spa — Visage Cinq Mondes",
+      "type": "interne",
+      "provider": "",
+      "price": 200,
+      "duration": "50min",
+      "active": true
+    },
+    {
+      "id": "sv3",
+      "name": "Fleurs de Bali Coup d'éclat",
+      "category": "Spa — Visage Cinq Mondes",
+      "type": "interne",
+      "provider": "",
+      "price": 130,
+      "duration": "20min",
+      "active": true
+    },
+    {
+      "id": "sv4",
+      "name": "5 Fleurs de Bali Hydratant",
+      "category": "Spa — Visage Cinq Mondes",
+      "type": "interne",
+      "provider": "",
+      "price": 210,
+      "duration": "50min",
+      "active": true
+    },
+    {
+      "id": "sv5",
+      "name": "Fleurs et Fruits de Bali Perfecteur Éclat",
+      "category": "Spa — Visage Cinq Mondes",
+      "type": "interne",
+      "provider": "",
+      "price": 310,
+      "duration": "80min",
+      "active": true
+    },
+    {
+      "id": "sv6",
+      "name": "Gommage Aromatique aux Épices",
+      "category": "Spa — Corps Cinq Mondes",
+      "type": "interne",
+      "provider": "",
+      "price": 120,
+      "duration": "20min",
+      "active": true
+    },
+    {
+      "id": "sv7",
+      "name": "Gommage Sublime au Monoï de Tahiti",
+      "category": "Spa — Corps Cinq Mondes",
+      "type": "interne",
+      "provider": "",
+      "price": 120,
+      "duration": "20min",
+      "active": true
+    },
+    {
+      "id": "sv8",
+      "name": "Gommage Purée de Papaye",
+      "category": "Spa — Corps Cinq Mondes",
+      "type": "interne",
+      "provider": "",
+      "price": 120,
+      "duration": "20min",
+      "active": true
+    },
+    {
+      "id": "sv9",
+      "name": "Massage Oriental Traditionnel",
+      "category": "Spa — Massages Cinq Mondes",
+      "type": "interne",
+      "provider": "",
+      "price": 210,
+      "duration": "50min",
+      "active": true
+    },
+    {
+      "id": "sv10",
+      "name": "Massage Ayurvédique Indien",
+      "category": "Spa — Massages Cinq Mondes",
+      "type": "interne",
+      "provider": "",
+      "price": 210,
+      "duration": "50min",
+      "active": true
+    },
+    {
+      "id": "sv11",
+      "name": "Massage Sublime de Polynésie",
+      "category": "Spa — Massages Cinq Mondes",
+      "type": "interne",
+      "provider": "",
+      "price": 210,
+      "duration": "50min",
+      "active": true
+    },
+    {
+      "id": "sv12",
+      "name": "Massage Sublime de Polynésie — Lâcher Prise",
+      "category": "Spa — Massages Cinq Mondes",
+      "type": "interne",
+      "provider": "",
+      "price": 310,
+      "duration": "80min",
+      "active": true
+    },
+    {
+      "id": "sv13",
+      "name": "Grand Rituel Impérial de Jeunesse",
+      "category": "Spa — Grands Rituels",
+      "type": "interne",
+      "provider": "",
+      "price": 330,
+      "duration": "1h40",
+      "active": true
+    },
+    {
+      "id": "sv14",
+      "name": "Grand Rituel Sublime de Polynésie",
+      "category": "Spa — Grands Rituels",
+      "type": "interne",
+      "provider": "",
+      "price": 330,
+      "duration": "1h40",
+      "active": true
+    },
+    {
+      "id": "sv15",
+      "name": "Grand Rituel de Félicité à Deux",
+      "category": "Spa — Grands Rituels",
+      "type": "interne",
+      "provider": "",
+      "price": 600,
+      "duration": "1h40",
+      "active": true
+    },
+    {
+      "id": "sv16",
+      "name": "Grand Rituel Journée Céleste",
+      "category": "Spa — Grands Rituels",
+      "type": "interne",
+      "provider": "",
+      "price": 490,
+      "duration": "2h10",
+      "active": true
+    },
+    {
+      "id": "sv17",
+      "name": "Massage Spécial Dos",
+      "category": "Spa — Massages Signature",
+      "type": "interne",
+      "provider": "",
+      "price": 100,
+      "duration": "30min",
+      "active": true
+    },
+    {
+      "id": "sv18",
+      "name": "Massage Relaxant Intense",
+      "category": "Spa — Massages Signature",
+      "type": "interne",
+      "provider": "",
+      "price": 140,
+      "duration": "30min",
+      "active": true
+    },
+    {
+      "id": "sv19",
+      "name": "Massage Amincissant",
+      "category": "Spa — Massages Signature",
+      "type": "interne",
+      "provider": "",
+      "price": 175,
+      "duration": "40min",
+      "active": true
+    },
+    {
+      "id": "sv20",
+      "name": "Maderothérapie (1 séance)",
+      "category": "Spa — Massages Signature",
+      "type": "interne",
+      "provider": "",
+      "price": 170,
+      "duration": "40min",
+      "active": true
+    },
+    {
+      "id": "sv21",
+      "name": "Maderothérapie (forfait 5 séances)",
+      "category": "Spa — Massages Signature",
+      "type": "interne",
+      "provider": "",
+      "price": 650,
+      "duration": "5x40min",
+      "active": true
+    },
+    {
+      "id": "sv22",
+      "name": "Massage aux Pochons",
+      "category": "Spa — Massages Signature",
+      "type": "interne",
+      "provider": "",
+      "price": 180,
+      "duration": "50min",
+      "active": true
+    },
+    {
+      "id": "sv23",
+      "name": "Massage Tonique",
+      "category": "Spa — Massages Signature",
+      "type": "interne",
+      "provider": "",
+      "price": 175,
+      "duration": "40min",
+      "active": true
+    },
+    {
+      "id": "sv24",
+      "name": "Réflexologie Plantaire",
+      "category": "Spa — Massages Signature",
+      "type": "interne",
+      "provider": "",
+      "price": 90,
+      "duration": "25min",
+      "active": true
+    },
+    {
+      "id": "sv25",
+      "name": "Réflexologie Faciale",
+      "category": "Spa — Massages Signature",
+      "type": "interne",
+      "provider": "",
+      "price": 110,
+      "duration": "25min",
+      "active": true
+    },
+    {
+      "id": "sv26",
+      "name": "Massage Visage et Cuir Chevelu",
+      "category": "Spa — Massages Signature",
+      "type": "interne",
+      "provider": "",
+      "price": 70,
+      "duration": "25min",
+      "active": true
+    },
+    {
+      "id": "sv27",
+      "name": "Massage Lomi-Lomi",
+      "category": "Spa — Massages Signature",
+      "type": "interne",
+      "provider": "",
+      "price": 175,
+      "duration": "40min",
+      "active": true
+    },
+    {
+      "id": "sv28",
+      "name": "Massage Californien",
+      "category": "Spa — Massages Signature",
+      "type": "interne",
+      "provider": "",
+      "price": 175,
+      "duration": "50min",
+      "active": true
+    },
+    {
+      "id": "sv29",
+      "name": "Massage Thaï",
+      "category": "Spa — Massages Signature",
+      "type": "interne",
+      "provider": "",
+      "price": 175,
+      "duration": "50min",
+      "active": true
+    },
+    {
+      "id": "sv30",
+      "name": "Massage Shiatsu",
+      "category": "Spa — Massages Signature",
+      "type": "interne",
+      "provider": "",
+      "price": 175,
+      "duration": "50min",
+      "active": true
+    },
+    {
+      "id": "sv31",
+      "name": "Massage Ayurvédique Relaxant",
+      "category": "Spa — Massages Signature",
+      "type": "interne",
+      "provider": "",
+      "price": 175,
+      "duration": "50min",
+      "active": true
+    },
+    {
+      "id": "sv32",
+      "name": "Massage aux Pierres Chaudes",
+      "category": "Spa — Massages Signature",
+      "type": "interne",
+      "provider": "",
+      "price": 185,
+      "duration": "50min",
+      "active": true
+    },
+    {
+      "id": "sv33",
+      "name": "Drainage Lymphatique",
+      "category": "Spa — Massages Signature",
+      "type": "interne",
+      "provider": "",
+      "price": 165,
+      "duration": "50min",
+      "active": true
+    },
+    {
+      "id": "sv34",
+      "name": "Drainage Lymphatique Jambes",
+      "category": "Spa — Massages Signature",
+      "type": "interne",
+      "provider": "",
+      "price": 110,
+      "duration": "30min",
+      "active": true
+    },
+    {
+      "id": "sv35",
+      "name": "Pressothérapie Jambes",
+      "category": "Spa — Massages Signature",
+      "type": "interne",
+      "provider": "",
+      "price": 80,
+      "duration": "20min",
+      "active": true
+    },
+    {
+      "id": "sv36",
+      "name": "Pressothérapie Corps",
+      "category": "Spa — Massages Signature",
+      "type": "interne",
+      "provider": "",
+      "price": 100,
+      "duration": "20min",
+      "active": true
+    },
+    {
+      "id": "sv37",
+      "name": "Sauna ou Hammam (accès)",
+      "category": "Spa — Soins Humides",
+      "type": "interne",
+      "provider": "",
+      "price": 50,
+      "duration": "30min",
+      "active": true
+    },
+    {
+      "id": "sv38",
+      "name": "Hammam Gommage traditionnel savon vert",
+      "category": "Spa — Soins Humides",
+      "type": "interne",
+      "provider": "",
+      "price": 70,
+      "duration": "30min",
+      "active": true
+    },
+    {
+      "id": "sv39",
+      "name": "Hammam Gommage traditionnel au Ghassoul",
+      "category": "Spa — Soins Humides",
+      "type": "interne",
+      "provider": "",
+      "price": 110,
+      "duration": "45min",
+      "active": true
+    },
+    {
+      "id": "sv40",
+      "name": "Hammam Gommage + enveloppement Algues Marines",
+      "category": "Spa — Soins Humides",
+      "type": "interne",
+      "provider": "",
+      "price": 110,
+      "duration": "45min",
+      "active": true
+    },
+    {
+      "id": "sv41",
+      "name": "Bain Hydro-massant aux Parfums de Tunisie",
+      "category": "Spa — Soins Humides",
+      "type": "interne",
+      "provider": "",
+      "price": 80,
+      "duration": "20min",
+      "active": true
+    },
+    {
+      "id": "sv42",
+      "name": "Enveloppement Algues Jambes Tonifiantes",
+      "category": "Spa — Soins Humides",
+      "type": "interne",
+      "provider": "",
+      "price": 80,
+      "duration": "20min",
+      "active": true
+    },
+    {
+      "id": "sv43",
+      "name": "Enveloppement Algues Minceur",
+      "category": "Spa — Soins Humides",
+      "type": "interne",
+      "provider": "",
+      "price": 80,
+      "duration": "20min",
+      "active": true
+    },
+    {
+      "id": "sv44",
+      "name": "Enveloppement Cocoon Lit Flottant Boue Marine",
+      "category": "Spa — Soins Humides",
+      "type": "interne",
+      "provider": "",
+      "price": 80,
+      "duration": "20min",
+      "active": true
+    },
+    {
+      "id": "sv45",
+      "name": "Enveloppement Détente Lit Flottant Algues Marines",
+      "category": "Spa — Soins Humides",
+      "type": "interne",
+      "provider": "",
+      "price": 80,
+      "duration": "20min",
+      "active": true
+    },
+    {
+      "id": "sv46",
+      "name": "Massage aromatique sous pluie d'eau",
+      "category": "Spa — Soins Humides",
+      "type": "interne",
+      "provider": "",
+      "price": 80,
+      "duration": "20min",
+      "active": true
+    },
+    {
+      "id": "sv47",
+      "name": "Manucure à la paraffine",
+      "category": "Beauté — Mains & Pieds",
+      "type": "interne",
+      "provider": "",
+      "price": 120,
+      "duration": "90min",
+      "active": true
+    },
+    {
+      "id": "sv48",
+      "name": "Pédicure à la paraffine",
+      "category": "Beauté — Mains & Pieds",
+      "type": "interne",
+      "provider": "",
+      "price": 120,
+      "duration": "90min",
+      "active": true
+    },
+    {
+      "id": "sv49",
+      "name": "Soins des pieds + pose vernis",
+      "category": "Beauté — Mains & Pieds",
+      "type": "interne",
+      "provider": "",
+      "price": 70,
+      "duration": "30min",
+      "active": true
+    },
+    {
+      "id": "sv50",
+      "name": "Soins des mains + pose vernis",
+      "category": "Beauté — Mains & Pieds",
+      "type": "interne",
+      "provider": "",
+      "price": 70,
+      "duration": "30min",
+      "active": true
+    },
+    {
+      "id": "sv51",
+      "name": "Pose vernis mains (classique/French)",
+      "category": "Beauté — Mains & Pieds",
+      "type": "interne",
+      "provider": "",
+      "price": 35,
+      "duration": "30min",
+      "active": true
+    },
+    {
+      "id": "sv52",
+      "name": "Pose vernis pieds (classique/French)",
+      "category": "Beauté — Mains & Pieds",
+      "type": "interne",
+      "provider": "",
+      "price": 35,
+      "duration": "30min",
+      "active": true
+    },
+    {
+      "id": "sv53",
+      "name": "Dépose vernis permanent",
+      "category": "Beauté — Onglerie Permanent",
+      "type": "interne",
+      "provider": "",
+      "price": 20,
+      "active": true
+    },
+    {
+      "id": "sv54",
+      "name": "Pose vernis permanent (mains/pieds)",
+      "category": "Beauté — Onglerie Permanent",
+      "type": "interne",
+      "provider": "",
+      "price": 60,
+      "active": true
+    },
+    {
+      "id": "sv55",
+      "name": "Gel sur ongles naturels + vernis permanent",
+      "category": "Beauté — Onglerie Permanent",
+      "type": "interne",
+      "provider": "",
+      "price": 90,
+      "active": true
+    },
+    {
+      "id": "sv56",
+      "name": "French permanent sur ongles naturels",
+      "category": "Beauté — Onglerie Permanent",
+      "type": "interne",
+      "provider": "",
+      "price": 60,
+      "active": true
+    },
+    {
+      "id": "sv57",
+      "name": "Rinçage cheveux L'Oréal",
+      "category": "Beauté — Cheveux",
+      "type": "interne",
+      "provider": "",
+      "price": 30,
+      "active": true
+    },
+    {
+      "id": "sv58",
+      "name": "Brushing cheveux courts",
+      "category": "Beauté — Cheveux",
+      "type": "interne",
+      "provider": "",
+      "price": 30,
+      "active": true
+    },
+    {
+      "id": "sv59",
+      "name": "Brushing cheveux longs",
+      "category": "Beauté — Cheveux",
+      "type": "interne",
+      "provider": "",
+      "price": 50,
+      "active": true
+    },
+    {
+      "id": "sv60",
+      "name": "Coupe cheveux femme",
+      "category": "Beauté — Cheveux",
+      "type": "interne",
+      "provider": "",
+      "price": 70,
+      "active": true
+    },
+    {
+      "id": "sv61",
+      "name": "Coupe cheveux homme",
+      "category": "Beauté — Cheveux",
+      "type": "interne",
+      "provider": "",
+      "price": 40,
+      "active": true
+    },
+    {
+      "id": "sv62",
+      "name": "Coloration Majirel (L'Oréal)",
+      "category": "Beauté — Cheveux",
+      "type": "interne",
+      "provider": "",
+      "price": 120,
+      "active": true
+    },
+    {
+      "id": "sv63",
+      "name": "Coloration INOA sans ammoniaque (L'Oréal)",
+      "category": "Beauté — Cheveux",
+      "type": "interne",
+      "provider": "",
+      "price": 150,
+      "active": true
+    },
+    {
+      "id": "sv64",
+      "name": "Épilation Jambes",
+      "category": "Beauté — Épilation",
+      "type": "interne",
+      "provider": "",
+      "price": 80,
+      "duration": "30min",
+      "active": true
+    },
+    {
+      "id": "sv65",
+      "name": "Épilation Demi-jambes",
+      "category": "Beauté — Épilation",
+      "type": "interne",
+      "provider": "",
+      "price": 65,
+      "duration": "15min",
+      "active": true
+    },
+    {
+      "id": "sv66",
+      "name": "Épilation Bras",
+      "category": "Beauté — Épilation",
+      "type": "interne",
+      "provider": "",
+      "price": 65,
+      "duration": "20min",
+      "active": true
+    },
+    {
+      "id": "sv67",
+      "name": "Épilation Visage",
+      "category": "Beauté — Épilation",
+      "type": "interne",
+      "provider": "",
+      "price": 50,
+      "duration": "20min",
+      "active": true
+    },
+    {
+      "id": "sv68",
+      "name": "Épilation Menton",
+      "category": "Beauté — Épilation",
+      "type": "interne",
+      "provider": "",
+      "price": 30,
+      "duration": "10min",
+      "active": true
+    },
+    {
+      "id": "sv69",
+      "name": "Épilation Maillot",
+      "category": "Beauté — Épilation",
+      "type": "interne",
+      "provider": "",
+      "price": 35,
+      "duration": "20min",
+      "active": true
+    },
+    {
+      "id": "sv70",
+      "name": "Épilation Aisselles",
+      "category": "Beauté — Épilation",
+      "type": "interne",
+      "provider": "",
+      "price": 35,
+      "duration": "20min",
+      "active": true
+    },
+    {
+      "id": "sv71",
+      "name": "Épilation Lèvres",
+      "category": "Beauté — Épilation",
+      "type": "interne",
+      "provider": "",
+      "price": 15,
+      "duration": "10min",
+      "active": true
+    },
+    {
+      "id": "sv72",
+      "name": "Épilation Sourcils",
+      "category": "Beauté — Épilation",
+      "type": "interne",
+      "provider": "",
+      "price": 20,
+      "duration": "20min",
+      "active": true
+    },
+    {
+      "id": "sv73",
+      "name": "Épilation Dos ou Ventre",
+      "category": "Beauté — Épilation",
+      "type": "interne",
+      "provider": "",
+      "price": 50,
+      "duration": "30min",
+      "active": true
+    },
+    {
+      "id": "sv74",
+      "name": "Épilation Corps Complet",
+      "category": "Beauté — Épilation",
+      "type": "interne",
+      "provider": "",
+      "price": 200,
+      "duration": "90min",
+      "active": true
+    },
+    {
+      "id": "sv75",
+      "name": "Journée Relax (2 soins)",
+      "category": "Spa — Journées Oceana",
+      "type": "interne",
+      "provider": "",
+      "price": 150,
+      "duration": "1 jour",
+      "active": true
+    },
+    {
+      "id": "sv76",
+      "name": "Journée Relax Plus (2 soins)",
+      "category": "Spa — Journées Oceana",
+      "type": "interne",
+      "provider": "",
+      "price": 190,
+      "duration": "1 jour",
+      "active": true
+    },
+    {
+      "id": "sv77",
+      "name": "Journée Détente (3 soins)",
+      "category": "Spa — Journées Oceana",
+      "type": "interne",
+      "provider": "",
+      "price": 220,
+      "duration": "1 jour",
+      "active": true
+    },
+    {
+      "id": "sv78",
+      "name": "Journée Beauté (3 soins)",
+      "category": "Spa — Journées Oceana",
+      "type": "interne",
+      "provider": "",
+      "price": 200,
+      "duration": "1 jour",
+      "active": true
+    },
+    {
+      "id": "sv79",
+      "name": "Journée Énergie (3 soins)",
+      "category": "Spa — Journées Oceana",
+      "type": "interne",
+      "provider": "",
+      "price": 260,
+      "duration": "1 jour",
+      "active": true
+    },
+    {
+      "id": "sv80",
+      "name": "Journée Orientale (4 soins)",
+      "category": "Spa — Journées Oceana",
+      "type": "interne",
+      "provider": "",
+      "price": 290,
+      "duration": "1 jour",
+      "active": true
+    },
+    {
+      "id": "sv81",
+      "name": "Escapade Détente (3 jours, 9 soins)",
+      "category": "Spa — Escapades Oceana",
+      "type": "interne",
+      "provider": "",
+      "price": 680,
+      "duration": "3 jours",
+      "active": true
+    },
+    {
+      "id": "sv82",
+      "name": "Escapade Extrême Détente (4 jours, 13 soins)",
+      "category": "Spa — Escapades Oceana",
+      "type": "interne",
+      "provider": "",
+      "price": 1050,
+      "duration": "4 jours",
+      "active": true
+    },
+    {
+      "id": "sv83",
+      "name": "Escapade Extrême Détente (6 jours, 20 soins)",
+      "category": "Spa — Escapades Oceana",
+      "type": "interne",
+      "provider": "",
+      "price": 1650,
+      "duration": "6 jours",
+      "active": true
+    },
+    {
+      "id": "sv84",
+      "name": "Escapade Énergie (3 jours, 9 soins)",
+      "category": "Spa — Escapades Oceana",
+      "type": "interne",
+      "provider": "",
+      "price": 800,
+      "duration": "3 jours",
+      "active": true
+    },
+    {
+      "id": "sv85",
+      "name": "Escapade Minceur (3 jours, 9 soins)",
+      "category": "Spa — Escapades Oceana",
+      "type": "interne",
+      "provider": "",
+      "price": 790,
+      "duration": "3 jours",
+      "active": true
+    },
+    {
+      "id": "sv86",
+      "name": "Escapade Beauté & Silhouette (3 jours, 11 soins)",
+      "category": "Spa — Escapades Oceana",
+      "type": "interne",
+      "provider": "",
+      "price": 980,
+      "duration": "3 jours",
+      "active": true
+    },
+    {
+      "id": "sv87",
+      "name": "Escapade Jambes Légères (3 jours, 11 soins)",
+      "category": "Spa — Escapades Oceana",
+      "type": "interne",
+      "provider": "",
+      "price": 820,
+      "duration": "3 jours",
+      "active": true
+    },
+    {
+      "id": "sv88",
+      "name": "Escapade After Golf (5 jours, 10 soins)",
+      "category": "Spa — Escapades Oceana",
+      "type": "interne",
+      "provider": "",
+      "price": 830,
+      "duration": "5 jours",
+      "active": true
+    },
+    {
+      "id": "sv89",
+      "name": "Escapade Week-end Cool (2 jours, 8 soins)",
+      "category": "Spa — Escapades Oceana",
+      "type": "interne",
+      "provider": "",
+      "price": 650,
+      "duration": "2 jours",
+      "active": true
+    },
+    {
+      "id": "sv90",
+      "name": "Court de Tennis (terre battue)",
+      "category": "Sport",
+      "type": "interne",
+      "provider": "",
+      "price": 25,
+      "active": true
+    },
+    {
+      "id": "sv91",
+      "name": "Court de Padel (à proximité)",
+      "category": "Sport",
+      "type": "externe",
+      "provider": "",
+      "price": 30,
+      "active": true
+    },
+    {
+      "id": "sv92",
+      "name": "Planche à voile / Ski nautique / Jet-ski",
+      "category": "Sport nautique",
+      "type": "externe",
+      "provider": "Base nautique Oceana",
+      "price": 65,
+      "active": true
+    },
+    {
+      "id": "sv93",
+      "name": "Plongée sous-marine (baptême)",
+      "category": "Sport nautique",
+      "type": "externe",
+      "provider": "Centre de plongée partenaire",
+      "price": 140,
+      "active": true
+    },
+    {
+      "id": "sv94",
+      "name": "Équitation / Randonnée nature",
+      "category": "Excursion",
+      "type": "externe",
+      "provider": "Écurie partenaire Hammamet",
+      "price": 90,
+      "active": true
+    },
+    {
+      "id": "sv95",
+      "name": "Green Fee Golf 18 trous (à proximité)",
+      "category": "Sport",
+      "type": "externe",
+      "provider": "Golf Club Yasmine Hammamet",
+      "price": 220,
+      "active": true
+    },
+    {
+      "id": "sv96",
+      "name": "Baby-sitting sur demande",
+      "category": "Famille",
+      "type": "interne",
+      "provider": "",
+      "price": 40,
+      "active": true
+    },
+    {
+      "id": "sv97",
+      "name": "Room Service",
+      "category": "Restauration",
+      "type": "interne",
+      "provider": "",
+      "price": 0,
+      "active": true
+    },
+    {
+      "id": "sv98",
+      "name": "Dîner au restaurant à la carte",
+      "category": "Restauration",
+      "type": "interne",
+      "provider": "",
+      "price": 75,
+      "active": true
+    },
+    {
+      "id": "sv99",
+      "name": "Transfert Aéroport (Tunis / Monastir / Enfidha)",
+      "category": "Transport",
+      "type": "externe",
+      "provider": "Navette Oceana",
+      "price": 100,
+      "active": true
+    },
+    {
+      "id": "sv100",
+      "name": "Blanchisserie",
+      "category": "Divers",
+      "type": "interne",
+      "provider": "",
+      "price": 20,
+      "active": true
+    }
+  ]
+}
