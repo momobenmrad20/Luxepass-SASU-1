@@ -172,6 +172,8 @@ async function callGeminiVision(fileBuffer: Buffer, mimeType: string): Promise<s
     candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>;
   };
   const text = data.candidates?.[0]?.content?.parts?.find((p) => p.text)?.text;
+  // 🔧 DEBUG TEMPORAIRE — à retirer une fois l'extraction Gemini validée.
+  console.log("[ocr.service] Réponse brute Gemini:", JSON.stringify(data).slice(0, 2000));
   if (!text) {
     throw new OcrServiceError("Réponse Gemini vide ou dans un format inattendu");
   }
