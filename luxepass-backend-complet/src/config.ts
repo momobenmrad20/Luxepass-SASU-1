@@ -192,6 +192,7 @@ export const config = {
   // que concierge.routes.ts intercepte pour basculer en mode dégradé.
   ai: {
     anthropicApiKey: process.env.ANTHROPIC_API_KEY ?? "",
+    geminiApiKey: process.env.GEMINI_API_KEY ?? "",
     model: process.env.ANTHROPIC_MODEL ?? "claude-sonnet-5",
     // OCR pièce d'identité (ocr.service.ts) : modèle séparément
     // configurable (utile si on veut un jour basculer sur un modèle
