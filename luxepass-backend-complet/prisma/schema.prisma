@@ -79,15 +79,16 @@ model Hotel {
 }
 
 model Staff {
-  id           String    @id @default(cuid())
-  email        String    @unique
-  passwordHash String
-  hotelId      String
-  hotel        Hotel     @relation(fields: [hotelId], references: [id], onDelete: Cascade)
-  role         StaffRole
-  name         String?
-  tokenVersion Int       @default(0)
-  createdAt    DateTime  @default(now())
+  id             String    @id @default(cuid())
+  email          String    @unique
+  passwordHash   String?
+  supabaseUserId String?   @unique
+  hotelId        String
+  hotel          Hotel     @relation(fields: [hotelId], references: [id], onDelete: Cascade)
+  role           StaffRole
+  name           String?
+  tokenVersion   Int       @default(0)
+  createdAt      DateTime  @default(now())
 
   @@index([hotelId])
   @@map("staff")
