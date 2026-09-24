@@ -234,3 +234,4 @@ if (config.nodeEnv === "production" && config.payments.stripe.enabled && config.
   // eslint-disable-next-line no-console
   console.warn("[payments] ⚠️ NODE_ENV=production mais STRIPE_SECRET_KEY est une clé de TEST — aucun vrai paiement ne sera encaissé.");
 }
+supabase: { url, anonKey, serviceRoleKey }
