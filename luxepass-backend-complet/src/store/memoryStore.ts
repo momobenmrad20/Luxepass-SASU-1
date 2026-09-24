@@ -22,7 +22,8 @@ export interface HotelRecord {
 export interface StaffRecord {
   id: string;
   email: string;
-  passwordHash: string;
+  passwordHash: string | null;
+  supabaseUserId: string | null;
   hotelId: string;
   role: StaffRole;
   name?: string | null;
