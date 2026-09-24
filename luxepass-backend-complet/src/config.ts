@@ -88,9 +88,16 @@ export const config = {
   // Utilisée par src/prisma.ts (adapter pg) — c'est bien la chaîne
   // "Transaction pooler" (DATABASE_URL, port 6543), pas DIRECT_URL qui ne
   // sert qu'aux migrations.
-  databaseUrl: required("DATABASE_URL"),
+databaseUrl: required("DATABASE_URL"),
+
+  supabase: {
+    url: required("SUPABASE_URL"),
+    anonKey: required("SUPABASE_ANON_KEY"),
+    serviceRoleKey: required("SUPABASE_SERVICE_ROLE_KEY"),
+  },
 
   jwt: {
+
     accessSecret: required("JWT_ACCESS_SECRET", "dev-only-access-secret"),
     refreshSecret: required("JWT_REFRESH_SECRET", "dev-only-refresh-secret"),
     accessTtl: process.env.JWT_ACCESS_TTL ?? "15m",
