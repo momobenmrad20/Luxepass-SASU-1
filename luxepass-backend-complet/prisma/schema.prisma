@@ -23,11 +23,21 @@ datasource db {
 }
 
 enum StaffRole {
-  reception
-  gm
-  housekeeping
-  maintenance
-  super_admin
+  model Staff {
+  id             String    @id @default(cuid())
+  email          String    @unique
+  passwordHash   String?   // legacy — à supprimer une fois la migration terminée
+  supabaseUserId String?   @unique
+  hotelId        String
+  hotel          Hotel     @relation(fields: [hotelId], references: [id], onDelete: Cascade)
+  role           StaffRole
+  name           String?
+  tokenVersion   Int       @default(0)
+  createdAt      DateTime  @default(now())
+
+  @@index([hotelId])
+  @@map("staff")
+}
 }
 
 enum CheckinStage {
