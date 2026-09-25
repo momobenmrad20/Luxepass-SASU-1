@@ -6,7 +6,7 @@ import { requireStaffAuth, requireSameHotel, requireRole, requireStreamToken } f
 import { supabaseAdmin } from "../lib/supabase";
 import {
   hotelIdParamsSchema,
-  hotelIdStayParamsSchema,
+  hotelStayIdParamsSchema,
   requestIdParamsSchema,
   reportIdParamsSchema,
   orderIdParamsSchema,
@@ -31,7 +31,7 @@ import { translateServiceCatalog, AiServiceError } from "../services/ai.service"
 import { getOrSet, invalidate, invalidatePrefix } from "../utils/shortCache";
 import { signStreamToken } from "../utils/jwt";
 import { subscribe as subscribeToHotelEvents, publish } from "../events/hotelEventBus";
-import { catalogueLimiter } from "../middleware/publicRateLimiter";
+import { catalogueLimiter } from "../middleware/publicRateLimit";
 
 export const pmsRouter = Router();
 
