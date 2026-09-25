@@ -29,16 +29,22 @@ function parseTtlToMs(ttl: string): number {
 }
 
 function baseCookieOptions(maxAge: number): CookieOptions {
-  return {
-    httpOnly: true,
-    // Secure obligatoire en production (HTTPS) ; désactivé en dev (http://localhost)
-    // sinon le navigateur rejette silencieusement le cookie.
-    secure: config.nodeEnv === "production",
-    sameSite: "lax",
-    path: "/",
-    maxAge,
-  };
-}
+   return {
+     httpOnly: true,
+     // Secure obligatoire en production (HTTPS) ; désactivé en dev (http://localhost)
+     // sinon le navigateur rejette silencieusement le cookie.
+     secure: config.nodeEnv === "production",
+-    sameSite: "lax",
++    // "none" est nécessaire car frontend et backend sont sur des domaines
++    // différents (luxepass-pms.onrender.com / luxepass-api.onrender.com) —
++    // un cookie cross-site n'est envoyé par le navigateur que s'il est
++    // SameSite=None, et SameSite=None exige Secure=true (donc uniquement en
++    // prod ; en dev localhost reste same-site, "lax" suffit).
++    sameSite: config.nodeEnv === "production" ? "none" : "lax",
+     path: "/",
+     maxAge,
+   };
+ }
 
 // Pose les cookies staff_session (access) et staff_refresh (refresh) sur la
 // réponse. À appeler après une connexion réussie, un refresh, ou un
