@@ -31,10 +31,16 @@ function parseTtlToMs(ttl: string): number {
 function baseCookieOptions(maxAge: number): CookieOptions {
    return {
      httpOnly: true,
-     // Secure obligatoire en production (HTTPS) ; désactivé en dev (http://localhost)
-     // sinon le navigateur rejette silencieusement le cookie.
-     secure: config.nodeEnv === "production",
-     sameSite: config.nodeEnv === "production" ? "none" : "lax",
+-    // Secure obligatoire en production (HTTPS) ; désactivé en dev (http://localhost)
+-    // sinon le navigateur rejette silencieusement le cookie.
+-    secure: config.nodeEnv === "production",
+-    sameSite: config.nodeEnv === "production" ? "none" : "lax",
++    // Toujours true : Render sert en HTTPS même hors prod, et frontend/backend
++    // sont sur des domaines différents (cross-site) qu'on soit en dev ou prod
++    // sur cette plateforme — donc SameSite=None + Secure=true systématiquement.
++    // (Ne dépend plus de NODE_ENV, qui n'est pas fiable sur ce déploiement.)
++    secure: true,
++    sameSite: "none",
      path: "/",
      maxAge,
    };
