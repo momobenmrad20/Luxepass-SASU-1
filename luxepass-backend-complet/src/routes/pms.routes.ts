@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { z } from "zod";
 import bcrypt from "bcryptjs";
 import { validate } from "../middleware/validate";
 import { asyncHandler } from "../middleware/asyncHandler";
@@ -34,6 +35,13 @@ import { subscribe as subscribeToHotelEvents, publish } from "../events/hotelEve
 import { catalogueLimiter } from "../middleware/publicRateLimit";
 
 export const pmsRouter = Router();
+
+// Validation du corps de la nouvelle route d'assignation de chambre —
+// un simple texte, cohérent avec `CheckinSession.room` (String? en Prisma,
+// pas de table Room/référentiel de chambres pour l'instant).
+const roomAssignSchema = z.object({
+  room: z.string().trim().min(1, "Chambre requise").max(20),
+});
 
 // Factorisée pour être réutilisée par GET /live-feed (snapshot ponctuel)
 // et par le snapshot initial du flux SSE GET /live-feed/stream — même
@@ -91,6 +99,33 @@ pmsRouter.post(
     const session = await requireActiveStay(stayId);
     if (session.hotelId !== hotelId) throw new NotFoundError("Séjour");
     res.json(await checkoutStay(session));
+  })
+);
+
+// PATCH /hotels/:hotelId/stays/:stayId/room — assigne/corrige la chambre
+// d'un séjour digital déjà complété (check-in fait via l'app client), pour
+// la reprise manuelle PMS. `completeAndIssueStay` ne fixait `room` qu'à la
+// création du séjour ; cette route permet de le faire après coup, une fois
+// que la réception connaît le vrai numéro de chambre (ancien PMS). Ne
+// touche à rien d'autre que le champ `room` — pas de lien avec un PMS
+// externe pour l'instant (§13 roadmap : identification du PMS à faire).
+// ⚠️ À ADAPTER : suppose une méthode `checkinStore.updateRoom(stayId, room)`
+// qui n'existe probablement pas encore dans checkinStore.ts — voir note
+// d'accompagnement pour l'implémentation suggérée.
+pmsRouter.patch(
+  "/hotels/:hotelId/stays/:stayId/room",
+  requireStaffAuth,
+  requireSameHotel("hotelId"),
+  requireRole("reception", "gm", "super_admin"),
+  validate({ params: hotelStayIdParamsSchema, body: roomAssignSchema }),
+  asyncHandler(async (req, res) => {
+    const { hotelId, stayId } = req.params;
+    const { room } = req.body;
+    const session = await requireActiveStay(stayId);
+    if (session.hotelId !== hotelId) throw new NotFoundError("Séjour");
+    const updated = await checkinStore.updateRoom(stayId, room);
+    publish(hotelId, { type: "stay.room_updated", data: { stayId, room: updated.room } });
+    res.json({ stayId: updated.stayId, room: updated.room });
   })
 );
 
