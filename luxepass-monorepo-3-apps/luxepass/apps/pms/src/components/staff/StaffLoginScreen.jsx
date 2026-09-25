@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { ShieldCheck } from "lucide-react";
-@shared/components/common/theme
-@shared/components/common/GlassCard
-@shared/components/common/GoldButton
+import { gold } from "@shared/components/common/theme";
+import GlassCard from "@shared/components/common/GlassCard";
+import GoldButton from "@shared/components/common/GoldButton";
 @shared/hooks/useI18n
 @shared/hooks/useAuth
 
