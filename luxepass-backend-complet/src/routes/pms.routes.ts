@@ -4,6 +4,7 @@ import { validate } from "../middleware/validate";
 import { asyncHandler } from "../middleware/asyncHandler";
 import { requireStaffAuth, requireSameHotel, requireRole, requireStreamToken } from "../middleware/auth";
 import {
+import { supabaseAdmin } from "../lib/supabase";
   hotelIdParamsSchema,
   hotelStayIdParamsSchema,
   requestIdParamsSchema,
@@ -394,12 +395,26 @@ pmsRouter.post(
       throw new ConflictError("Un compte existe déjà avec cet email");
     }
 
-    const passwordHash = await bcrypt.hash(password, 10);
-    const created = await staffStore.create({ email, passwordHash, hotelId, role, name });
+    const { data: authUser, error: authError } = await supabaseAdmin.auth.admin.createUser({
+      email,
+      password,
+      email_confirm: true,
+    });
+    if (authError || !authUser.user) {
+      throw new ConflictError("Impossible de créer le compte : " + (authError?.message ?? "erreur inconnue"));
+    }
+
+    const created = await staffStore.create({
+      email,
+      passwordHash: null,
+      supabaseUserId: authUser.user.id,
+      hotelId,
+      role,
+      name,
+    });
     res.status(201).json({ id: created.id, email: created.email, role: created.role, name: created.name ?? null });
   })
 );
-
 // DELETE /hotels/:hotelId/staff/:staffId
 pmsRouter.delete(
   "/hotels/:hotelId/staff/:staffId",
