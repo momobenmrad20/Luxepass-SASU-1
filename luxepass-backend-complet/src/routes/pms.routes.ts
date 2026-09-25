@@ -124,7 +124,7 @@ pmsRouter.patch(
     const session = await requireActiveStay(stayId);
     if (session.hotelId !== hotelId) throw new NotFoundError("Séjour");
     const updated = await checkinStore.updateRoom(stayId, room);
-    publish(hotelId, { type: "stay.room_updated", data: { stayId, room: updated.room } });
+    if (!updated) throw new NotFoundError("Séjour");
     res.json({ stayId: updated.stayId, room: updated.room });
   })
 );
@@ -467,3 +467,4 @@ pmsRouter.delete(
     res.status(204).send();
   })
 );
+                                   
