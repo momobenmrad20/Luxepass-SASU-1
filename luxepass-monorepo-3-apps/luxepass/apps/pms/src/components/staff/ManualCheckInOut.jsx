@@ -17,8 +17,17 @@ export default function ManualCheckInOut({ hotel }) {
   const { t } = useI18n();
   const { appState, setAppState } = useAppState();
   const { digitalActiveStays, digitalPendingStays } = useLiveFeed();
-  const { markPmsSynced: onMarkPmsSynced, digitalCheckout: onDigitalCheckout } = useStaffActions();
+  const {
+    markPmsSynced: onMarkPmsSynced,
+    digitalCheckout: onDigitalCheckout,
+    // ⚠️ À AJOUTER dans useStaffActions.ts : doit appeler
+    // PATCH /hotels/:hotelId/stays/:stayId/room et retourner { stayId, room }.
+    assignStayRoom: onAssignStayRoom,
+  } = useStaffActions();
   const [roomAssign, setRoomAssign] = useState({});
+  // Saisie locale du numéro de chambre pour les vrais séjours digitaux
+  // (distinct de `roomAssign` plus bas, qui reste sur le flux mock existant).
+  const [digitalRoomInput, setDigitalRoomInput] = useState({});
   const [toast, setToast] = useState(null);
   const guests = appState.pmsGuests || PMS_GUESTS;
   const digitalInHouse = digitalActiveStays.filter(s => s.stage === "completed");
@@ -53,6 +62,25 @@ export default function ManualCheckInOut({ hotel }) {
     flashToast(t.checkoutSuccess);
   };
 
+  // Assigne la chambre saisie à un vrai séjour digital, puis marque
+  // synchronisé — les deux actions restent séparées côté API (routes
+  // distinctes) mais regroupées ici en un seul geste pour la réception.
+  const assignRoomAndSync = async (stayId) => {
+    const room = (digitalRoomInput[stayId] || "").trim();
+    if (!room) {
+      flashToast("Numéro de chambre requis");
+      return;
+    }
+    try {
+      await onAssignStayRoom?.(stayId, room);
+      await onMarkPmsSynced?.(stayId);
+      setDigitalRoomInput(prev => ({ ...prev, [stayId]: "" }));
+      flashToast("Chambre assignée et synchronisée");
+    } catch (err) {
+      flashToast(err?.message || "Échec de l'assignation");
+    }
+  };
+
   return (
     <div className="space-y-6">
       {toast && (
@@ -72,14 +100,36 @@ export default function ManualCheckInOut({ hotel }) {
         ) : (
           <div className="space-y-2">
             {digitalPendingStays.map(s => (
-              <GlassCard key={s.stayId} className="p-4 flex items-center justify-between gap-3">
-                <div>
-                  <p className="text-white text-sm font-medium">{s.guestData?.firstName} {s.guestData?.lastName}</p>
-                  <p className="text-white/40 text-xs">{t.room} {s.room || "—"} • Arrivée {s.guestData?.arrival}</p>
+              <GlassCard key={s.stayId} className="p-4 space-y-3">
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <p className="text-white text-sm font-medium">{s.guestData?.firstName} {s.guestData?.lastName}</p>
+                    <p className="text-white/40 text-xs">{t.room} {s.room || "—"} • Arrivée {s.guestData?.arrival}</p>
+                  </div>
+                  {!s.room && (
+                    <GoldButton onClick={() => onMarkPmsSynced?.(s.stayId)} className="text-xs px-3 py-1.5 flex-shrink-0">
+                      <Check size={13} /> Marquer synchronisé
+                    </GoldButton>
+                  )}
                 </div>
-                <GoldButton onClick={() => onMarkPmsSynced?.(s.stayId)} className="text-xs px-3 py-1.5 flex-shrink-0">
-                  <Check size={13} /> Marquer synchronisé
-                </GoldButton>
+                {/* Tant que la chambre n'est pas connue, on la saisit ici —
+                    champ texte libre : il n'existe pas de référentiel de
+                    chambres côté backend (pas de modèle Room en base). */}
+                {!s.room && (
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="text"
+                      value={digitalRoomInput[s.stayId] || ""}
+                      onChange={e => setDigitalRoomInput({ ...digitalRoomInput, [s.stayId]: e.target.value })}
+                      placeholder="N° de chambre"
+                      className="flex-1 bg-white/5 border rounded-xl px-3 py-2 text-white text-xs focus:outline-none"
+                      style={{ borderColor: "rgba(212,175,55,0.2)" }}
+                    />
+                    <GoldButton onClick={() => assignRoomAndSync(s.stayId)} className="text-xs px-3 py-2 flex-shrink-0">
+                      <Check size={13} /> Assigner et synchroniser
+                    </GoldButton>
+                  </div>
+                )}
               </GlassCard>
             ))}
           </div>
