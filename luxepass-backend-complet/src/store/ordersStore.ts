@@ -1,11 +1,16 @@
 import { nanoid } from "nanoid";
 import { prisma } from "../prisma";
 import type { PostOrderInput } from "../schemas";
+import type { ResolvedOrderLine } from "../services/catalogPricing";
 
 // ─────────────────────────────────────────────────────────────
 // MIGRATION PHASE 1 : store Prisma/Postgres pour les commandes passées
 // après le check-in (room service, spa...). Mêmes noms de méthodes que
 // l'ancienne version in-memory — désormais async.
+//
+// `items` stocké est désormais toujours résolu côté serveur
+// (ResolvedOrderLine : id, name, price, qty) — jamais les {id, qty} bruts
+// envoyés par le client, cf. orders.routes.ts / catalogPricing.ts.
 // ─────────────────────────────────────────────────────────────
 
 export interface OrderRecord {
@@ -14,7 +19,7 @@ export interface OrderRecord {
   hotelId: string;
   room?: string | null;
   category: PostOrderInput["category"];
-  items: PostOrderInput["items"];
+  items: ResolvedOrderLine[];
   total: number;
   status: "pending" | "in_progress" | "completed" | "cancelled";
   // Non null = commande déjà RÉGLÉE EN LIGNE (cf. services/paymentService.ts) :
@@ -29,7 +34,7 @@ export const ordersStore = {
     hotelId: string,
     room: string | undefined,
     category: PostOrderInput["category"],
-    items: PostOrderInput["items"]
+    items: ResolvedOrderLine[]
   ): Promise<OrderRecord> {
     const total = items.reduce((sum, i) => sum + i.price * i.qty, 0);
     return prisma.order.create({
