@@ -43,9 +43,11 @@ export default function HotelPMS({ hotel }) {
   const [pmsTab, setPmsTab] = useState("overview");
   const [staffRole, setStaffRole] = useState("gm");
   const [guest360, setGuest360] = useState(null);
-
+const activeStayIds = new Set(digitalActiveStays.map(s => s.stayId));
     const guests = [
-      ...digitalPendingStays.map(s => ({
+      ...digitalPendingStays
+        .filter(s => !activeStayIds.has(s.stayId))
+        .map(s => ({
         id: s.stayId,
         name: s.guestData ? `${s.guestData.firstName} ${s.guestData.lastName}` : "Client",
         room: s.room || "—",
