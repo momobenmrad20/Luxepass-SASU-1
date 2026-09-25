@@ -3,13 +3,12 @@ import { validate } from "../middleware/validate";
 import { asyncHandler } from "../middleware/asyncHandler";
 import { stayIdParamsSchema, postOrderSchema } from "../schemas";
 import { ordersStore } from "../store/ordersStore";
+import { pmsStateStore } from "../store/pmsStateStore";
+import { resolveOrderItems } from "../services/catalogPricing";
 import { requireActiveStayWithPayment } from "../utils/requireActiveStay";
 import { publish } from "../events/hotelEventBus";
+import { AppError } from "../utils/errors";
 
-// Toutes les routes /stays/:stayId/* de ce fichier sont protégées par
-// requireStayAuth (stayToken client, ou JWT staff reception/gm/super_admin),
-// monté une fois sur `/stays/:stayId` dans index.ts AVANT ce router — voir
-// middleware/requireStayAuth.ts.
 export const ordersRouter = Router();
 
 // POST /stays/:stayId/orders
@@ -20,12 +19,30 @@ ordersRouter.post(
     const { stayId } = req.params;
     const session = await requireActiveStayWithPayment(stayId);
 
+    // Le prix ne vient jamais du client : {id, qty} seulement, name/price
+    // résolus ici depuis le catalogue serveur (même principe que
+    // /payments/create-intent, cf. catalogPricing.ts).
+    const catalog = await pmsStateStore.get(session.hotelId);
+    let resolvedItems;
+    try {
+      resolvedItems = resolveOrderItems({
+        category: req.body.category,
+        items: req.body.items,
+        catalog,
+      });
+    } catch (err) {
+      if (err instanceof AppError) {
+        return res.status(err.statusCode).json({ error: err.code, message: err.message });
+      }
+      throw err;
+    }
+
     const order = await ordersStore.create(
       stayId,
       session.hotelId,
       session.room ?? undefined,
       req.body.category,
-      req.body.items
+      resolvedItems
     );
 
     publish(session.hotelId, { type: "order.created", data: order });
@@ -38,7 +55,7 @@ ordersRouter.post(
   })
 );
 
-// GET /stays/:stayId/orders — historique des commandes du séjour (folio)
+// GET /stays/:stayId/orders — inchangé
 ordersRouter.get(
   "/stays/:stayId/orders",
   validate({ params: stayIdParamsSchema }),
@@ -54,13 +71,9 @@ ordersRouter.get(
         items: o.items,
         total: o.total,
         status: o.status,
-        // true = déjà réglée en ligne (PaymentIntent) : ne sera pas refacturée au checkout.
         paidOnline: Boolean(o.paymentId),
         createdAt: o.createdAt,
       })),
-      // folioTotal = consommation TOTALE du séjour (inchangé). Les commandes déjà
-      // payées en ligne en font partie mais ne sont plus dues : c'est balanceDue
-      // qui reste à facturer sur la carte du séjour.
       folioTotal: orders.reduce((sum, o) => sum + o.total, 0),
       paidOnlineTotal: orders.filter((o) => o.paymentId).reduce((sum, o) => sum + o.total, 0),
       balanceDue: orders.filter((o) => !o.paymentId).reduce((sum, o) => sum + o.total, 0),
