@@ -34,13 +34,7 @@ function baseCookieOptions(maxAge: number): CookieOptions {
      // Secure obligatoire en production (HTTPS) ; désactivé en dev (http://localhost)
      // sinon le navigateur rejette silencieusement le cookie.
      secure: config.nodeEnv === "production",
--    sameSite: "lax",
-+    // "none" est nécessaire car frontend et backend sont sur des domaines
-+    // différents (luxepass-pms.onrender.com / luxepass-api.onrender.com) —
-+    // un cookie cross-site n'est envoyé par le navigateur que s'il est
-+    // SameSite=None, et SameSite=None exige Secure=true (donc uniquement en
-+    // prod ; en dev localhost reste same-site, "lax" suffit).
-+    sameSite: config.nodeEnv === "production" ? "none" : "lax",
+     sameSite: config.nodeEnv === "production" ? "none" : "lax",
      path: "/",
      maxAge,
    };
