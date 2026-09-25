@@ -43,6 +43,17 @@ export function useStaffActions() {
         await staffApi.checkoutStay(staffHotelId, stayId).catch(() => {});
         refreshPmsSideData();
       },
+      // Assigne/corrige le numéro de chambre d'un séjour digital réel,
+      // pour la reprise manuelle PMS (ManualCheckInOut.jsx). Contrairement
+      // aux autres actions ci-dessus, on laisse l'erreur remonter (pas de
+      // .catch(() => {})) : l'UI doit savoir si l'assignation a échoué pour
+      // afficher un message et ne pas déclencher markPmsSynced à tort.
+      assignStayRoom: async (stayId, room) => {
+        if (!stayId || !ready()) return;
+        const result = await staffApi.assignRoom(staffHotelId, stayId, room);
+        refreshPmsSideData();
+        return result;
+      },
     };
   }, [staffToken, staffHotelId, refreshPmsSideData]);
 }
