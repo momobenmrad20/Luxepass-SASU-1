@@ -1,0 +1,225 @@
+-- CreateEnum
+CREATE TYPE "StaffRole" AS ENUM ('reception', 'gm', 'housekeeping', 'maintenance', 'super_admin');
+
+-- CreateEnum
+CREATE TYPE "CheckinStage" AS ENUM ('started', 'scanned', 'guest_data', 'signed', 'paid', 'completed', 'checked_out');
+
+-- CreateEnum
+CREATE TYPE "PaymentStatus" AS ENUM ('PENDING', 'PAID', 'FAILED');
+
+-- CreateTable
+CREATE TABLE "hotels" (
+    "id" TEXT NOT NULL,
+    "slug" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+
+    CONSTRAINT "hotels_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "staff" (
+    "id" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "passwordHash" TEXT,
+    "supabaseUserId" TEXT,
+    "hotelId" TEXT NOT NULL,
+    "role" "StaffRole" NOT NULL,
+    "name" TEXT,
+    "tokenVersion" INTEGER NOT NULL DEFAULT 0,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "staff_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "checkin_sessions" (
+    "id" TEXT NOT NULL,
+    "hotelId" TEXT NOT NULL,
+    "hotelSlug" TEXT NOT NULL,
+    "stage" "CheckinStage" NOT NULL DEFAULT 'started',
+    "guestData" JSONB,
+    "children" JSONB,
+    "signatureDataUrl" TEXT,
+    "paymentMethod" JSONB,
+    "room" TEXT,
+    "stayId" TEXT,
+    "pmsSynced" BOOLEAN NOT NULL DEFAULT false,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "completedAt" TIMESTAMP(3),
+
+    CONSTRAINT "checkin_sessions_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "orders" (
+    "id" TEXT NOT NULL,
+    "stayId" TEXT NOT NULL,
+    "hotelId" TEXT NOT NULL,
+    "room" TEXT,
+    "category" TEXT NOT NULL,
+    "items" JSONB NOT NULL,
+    "total" DOUBLE PRECISION NOT NULL,
+    "status" TEXT NOT NULL DEFAULT 'pending',
+    "paymentId" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "orders_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "payments" (
+    "id" TEXT NOT NULL,
+    "stayId" TEXT NOT NULL,
+    "hotelId" TEXT NOT NULL,
+    "provider" TEXT NOT NULL DEFAULT 'stripe',
+    "providerTransactionId" TEXT NOT NULL,
+    "status" "PaymentStatus" NOT NULL DEFAULT 'PENDING',
+    "category" TEXT NOT NULL,
+    "items" JSONB NOT NULL,
+    "amount" INTEGER NOT NULL,
+    "currency" TEXT NOT NULL,
+    "paymentMethodType" TEXT,
+    "cardBrand" TEXT,
+    "cardLast4" TEXT,
+    "failureCode" TEXT,
+    "failureMessage" TEXT,
+    "paidAt" TIMESTAMP(3),
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "payments_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "service_requests" (
+    "id" TEXT NOT NULL,
+    "stayId" TEXT NOT NULL,
+    "hotelId" TEXT NOT NULL,
+    "room" TEXT,
+    "req" TEXT NOT NULL,
+    "priority" TEXT NOT NULL DEFAULT 'MED',
+    "price" DOUBLE PRECISION NOT NULL DEFAULT 0,
+    "status" TEXT NOT NULL DEFAULT 'pending',
+    "sentiment" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "service_requests_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "maintenance_reports" (
+    "id" TEXT NOT NULL,
+    "stayId" TEXT NOT NULL,
+    "hotelId" TEXT NOT NULL,
+    "room" TEXT,
+    "issue" TEXT NOT NULL,
+    "equipment" TEXT,
+    "priority" TEXT NOT NULL DEFAULT 'HIGH',
+    "status" TEXT NOT NULL DEFAULT 'pending',
+    "ticket" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "maintenance_reports_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "notes" (
+    "id" TEXT NOT NULL,
+    "stayId" TEXT NOT NULL,
+    "hotelId" TEXT NOT NULL,
+    "room" TEXT,
+    "text" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "notes_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "pms_state" (
+    "hotelId" TEXT NOT NULL,
+    "state" JSONB NOT NULL DEFAULT '{}',
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "pms_state_pkey" PRIMARY KEY ("hotelId")
+);
+
+-- CreateIndex
+CREATE UNIQUE INDEX "hotels_slug_key" ON "hotels"("slug");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "staff_email_key" ON "staff"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "staff_supabaseUserId_key" ON "staff"("supabaseUserId");
+
+-- CreateIndex
+CREATE INDEX "staff_hotelId_idx" ON "staff"("hotelId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "checkin_sessions_stayId_key" ON "checkin_sessions"("stayId");
+
+-- CreateIndex
+CREATE INDEX "checkin_sessions_hotelId_stage_idx" ON "checkin_sessions"("hotelId", "stage");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "orders_paymentId_key" ON "orders"("paymentId");
+
+-- CreateIndex
+CREATE INDEX "orders_stayId_idx" ON "orders"("stayId");
+
+-- CreateIndex
+CREATE INDEX "orders_hotelId_idx" ON "orders"("hotelId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "payments_providerTransactionId_key" ON "payments"("providerTransactionId");
+
+-- CreateIndex
+CREATE INDEX "payments_stayId_idx" ON "payments"("stayId");
+
+-- CreateIndex
+CREATE INDEX "payments_hotelId_status_idx" ON "payments"("hotelId", "status");
+
+-- CreateIndex
+CREATE INDEX "service_requests_stayId_idx" ON "service_requests"("stayId");
+
+-- CreateIndex
+CREATE INDEX "service_requests_hotelId_idx" ON "service_requests"("hotelId");
+
+-- CreateIndex
+CREATE INDEX "maintenance_reports_stayId_idx" ON "maintenance_reports"("stayId");
+
+-- CreateIndex
+CREATE INDEX "maintenance_reports_hotelId_idx" ON "maintenance_reports"("hotelId");
+
+-- CreateIndex
+CREATE INDEX "notes_stayId_idx" ON "notes"("stayId");
+
+-- CreateIndex
+CREATE INDEX "notes_hotelId_idx" ON "notes"("hotelId");
+
+-- AddForeignKey
+ALTER TABLE "staff" ADD CONSTRAINT "staff_hotelId_fkey" FOREIGN KEY ("hotelId") REFERENCES "hotels"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "checkin_sessions" ADD CONSTRAINT "checkin_sessions_hotelId_fkey" FOREIGN KEY ("hotelId") REFERENCES "hotels"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "orders" ADD CONSTRAINT "orders_hotelId_fkey" FOREIGN KEY ("hotelId") REFERENCES "hotels"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "orders" ADD CONSTRAINT "orders_paymentId_fkey" FOREIGN KEY ("paymentId") REFERENCES "payments"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "payments" ADD CONSTRAINT "payments_hotelId_fkey" FOREIGN KEY ("hotelId") REFERENCES "hotels"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "service_requests" ADD CONSTRAINT "service_requests_hotelId_fkey" FOREIGN KEY ("hotelId") REFERENCES "hotels"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "maintenance_reports" ADD CONSTRAINT "maintenance_reports_hotelId_fkey" FOREIGN KEY ("hotelId") REFERENCES "hotels"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "notes" ADD CONSTRAINT "notes_hotelId_fkey" FOREIGN KEY ("hotelId") REFERENCES "hotels"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "pms_state" ADD CONSTRAINT "pms_state_hotelId_fkey" FOREIGN KEY ("hotelId") REFERENCES "hotels"("id") ON DELETE CASCADE ON UPDATE CASCADE;
