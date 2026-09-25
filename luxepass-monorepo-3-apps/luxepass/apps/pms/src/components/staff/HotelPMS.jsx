@@ -43,7 +43,33 @@ export default function HotelPMS({ hotel }) {
   const [pmsTab, setPmsTab] = useState("overview");
   const [staffRole, setStaffRole] = useState("gm");
   const [guest360, setGuest360] = useState(null);
-  const guests = appState.pmsGuests || PMS_GUESTS;
+
+    const guests = [
+      ...digitalPendingStays.map(s => ({
+        id: s.stayId,
+        name: s.guestData ? `${s.guestData.firstName} ${s.guestData.lastName}` : "Client",
+        room: s.room || "—",
+        status: "AI Validé",
+        arrival: "Arrivée ce soir",
+        nationality: s.guestData?.nationality || "🌍",
+        checkedIn: false,
+        hasChildren: (s.children || []).length > 0,
+        children: s.children || [],
+      })),
+      ...digitalActiveStays
+        .filter(s => s.stage === "completed")
+        .map(s => ({
+          id: s.stayId,
+          name: s.guestData ? `${s.guestData.firstName} ${s.guestData.lastName}` : "Client",
+          room: s.room || "—",
+          status: "AI Validé",
+          arrival: "Présent",
+          nationality: s.guestData?.nationality || "🌍",
+          checkedIn: true,
+          hasChildren: (s.children || []).length > 0,
+          children: s.children || [],
+        })),
+    ];
   const rooms = appState.rooms || ROOMS_STATUS;
   // Flux réel (backend, cross-device) plutôt que l'ancien state React
   // local qui ne se voyait que dans le même onglet que le client.
