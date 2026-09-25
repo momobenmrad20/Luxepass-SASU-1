@@ -88,3 +88,55 @@ export function priceOrderItems(input: {
   }
   return { lines, total };
 }
+// ─────────────────────────────────────────────────────────────
+// Variante pour les commandes classiques (POST /stays/:stayId/orders),
+// qui restent en unités PRINCIPALES (DT) — contrairement à
+// priceOrderItems ci-dessus (millimes, pour Stripe). Même principe de
+// sécurité : le client n'envoie que {id, qty}, le prix/nom viennent
+// toujours du catalogue serveur.
+// ─────────────────────────────────────────────────────────────
+
+export interface ResolvedOrderLine {
+  id: string;
+  name: string;
+  price: number; // unités principales (DT), comme CatalogEntry.price
+  qty: number;
+}
+
+export function resolveOrderItems(input: {
+  category: "room_service" | "spa" | "concierge";
+  items: ReadonlyArray<{ id: string; qty: number }>;
+  catalog: CatalogSnapshot;
+}): ResolvedOrderLine[] {
+  const { category, items, catalog } = input;
+
+  const source =
+    category === "room_service"
+      ? catalog.menu
+      : category === "spa"
+        ? catalog.services?.filter((s) => SPA_CATEGORY.test(s.category ?? ""))
+        : undefined;
+
+  if (category !== "concierge" && !source) {
+    throw new AppError(503, "catalog_unavailable", "Catalogue indisponible, réessayez plus tard");
+  }
+
+  const byId = new Map((source ?? []).map((e) => [e.id, e]));
+
+  const qtyById = new Map<string, number>();
+  for (const it of items) qtyById.set(it.id, (qtyById.get(it.id) ?? 0) + it.qty);
+
+  const lines: ResolvedOrderLine[] = [];
+  for (const [id, qty] of qtyById) {
+    if (category === "concierge") {
+      lines.push({ id, name: id, price: 0, qty });
+      continue;
+    }
+    const entry = byId.get(id);
+    if (!entry || entry.active === false) {
+      throw new AppError(422, "unknown_item", `Article indisponible : ${id}`, { itemId: id });
+    }
+    lines.push({ id, name: entry.name, price: entry.price, qty });
+  }
+  return lines;
+}
