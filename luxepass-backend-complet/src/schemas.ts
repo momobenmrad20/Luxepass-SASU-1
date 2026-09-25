@@ -203,16 +203,18 @@ export const hotelStayIdParamsSchema = z.object({
   stayId: z.string().min(1),
 });
 
-const orderItemSchema = z.object({
+// Le client n'envoie plus qu'une RÉFÉRENCE (id + quantité) : name et price
+// sont retirés du schéma d'entrée et résolus côté serveur depuis le
+// catalogue (même logique que createPaymentIntentSchema ci-dessous, §8bis),
+// pour empêcher un client de fixer lui-même son propre prix.
+const orderItemRefSchema = z.object({
   id: z.string().min(1).max(100),
-  name: z.string().min(1).max(150),
-  price: z.coerce.number().nonnegative(),
   qty: z.coerce.number().int().min(1).max(50),
 });
 
 export const postOrderSchema = z.object({
   category: z.enum(["room_service", "spa", "concierge"]).default("room_service"),
-  items: z.array(orderItemSchema).min(1).max(50),
+  items: z.array(orderItemRefSchema).min(1).max(50),
 });
 
 // ─────────────────────────────────────────────
