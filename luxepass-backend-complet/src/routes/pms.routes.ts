@@ -3,17 +3,11 @@ import bcrypt from "bcryptjs";
 import { validate } from "../middleware/validate";
 import { asyncHandler } from "../middleware/asyncHandler";
 import { requireStaffAuth, requireSameHotel, requireRole, requireStreamToken } from "../middleware/auth";
-import {
 import { supabaseAdmin } from "../lib/supabase";
+import {
   hotelIdParamsSchema,
-  hotelStayIdParamsSchema,
-  requestIdParamsSchema,
-  reportIdParamsSchema,
-  orderIdParamsSchema,
-  statusPatchSchema,
-  pmsStatePatchSchema,
-  createStaffSchema,
-  staffIdParamsSchema,
+  hotelIdStayParamsSchema,
+  ...
 } from "../schemas";
 import { checkinStore } from "../store/checkinStore";
 import { serviceRequestsStore } from "../store/serviceRequestsStore";
