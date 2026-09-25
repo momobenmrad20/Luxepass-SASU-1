@@ -491,6 +491,16 @@ export const staffApi = {
       method: "POST",
     });
   },
+  // PATCH /hotels/:hotelId/stays/:stayId/room → { stayId, room }
+  // Assigne/corrige la chambre d'un séjour digital réel, pour la reprise
+  // manuelle PMS (ManualCheckInOut.jsx → useStaffActions.assignStayRoom).
+  async assignRoom(hotelId, stayId, room) {
+    return apiFetch(`/hotels/${encodeURIComponent(hotelId)}/stays/${encodeURIComponent(stayId)}/room`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ room }),
+    });
+  },
   async policeForms(hotelId, date) {
     return apiFetch(`/hotels/${encodeURIComponent(hotelId)}/police-forms?date=${encodeURIComponent(date)}`, {
       method: "GET",
