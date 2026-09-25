@@ -3,8 +3,8 @@ import { ShieldCheck } from "lucide-react";
 import { gold } from "@shared/components/common/theme";
 import GlassCard from "@shared/components/common/GlassCard";
 import GoldButton from "@shared/components/common/GoldButton";
-@shared/hooks/useI18n
-@shared/hooks/useAuth
+import { useI18n } from "@shared/hooks/useI18n";
+import { useAuth } from "@shared/hooks/useAuth";
 
 // Extrait tel quel de LuxePass.jsx (lignes 5226-5252 d'origine) — aucun
 // changement de logique, de props, d'état ou de nom.
