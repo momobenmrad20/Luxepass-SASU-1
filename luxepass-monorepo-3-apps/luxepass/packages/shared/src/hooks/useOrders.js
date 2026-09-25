@@ -82,7 +82,7 @@ export function useOrders({ guest, hotel, room, activeTab }) {
       const category = activeTab === "spa" ? "spa" : "room_service";
       await ordersApi.create(
         guest.stayId,
-        cart.map(c => ({ id: c.id, name: c.name, price: c.price, qty: c.qty })),
+        cart.map(c => ({ id: c.id, qty: c.qty })),
         category
       );
       pushOrder(cart.map(c => `${c.name} x${c.qty}`), cartTotal); // synchro affichage PMS (module non branché au backend)
