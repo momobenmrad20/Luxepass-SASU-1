@@ -1,17 +1,17 @@
 import { useState } from "react";
 import { ShieldCheck } from "lucide-react";
-import { gold } from "@shared/components/common/theme";
-import GlassCard from "@shared/components/common/GlassCard";
-import GoldButton from "@shared/components/common/GoldButton";
-import { useI18n } from "@shared/hooks/useI18n";
-import { useAuth } from "@shared/hooks/useAuth";
+@shared/components/common/theme
+@shared/components/common/GlassCard
+@shared/components/common/GoldButton
+@shared/hooks/useI18n
+@shared/hooks/useAuth
 
 // Extrait tel quel de LuxePass.jsx (lignes 5226-5252 d'origine) — aucun
 // changement de logique, de props, d'état ou de nom.
 export default function StaffLoginScreen() {
   const { t } = useI18n();
   const { loginStaff: onLogin, staffLoginLoading: loading, staffLoginError: error } = useAuth();
-  const [email, setEmail] = useState("reception@ocean-a-suites.tn");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   return (
@@ -32,7 +32,7 @@ export default function StaffLoginScreen() {
         <GoldButton className="w-full py-2.5" disabled={loading || !email || !password} onClick={() => onLogin(email, password)}>
           {loading ? "Connexion…" : "Se connecter"}
         </GoldButton>
-        <p className="text-white/25 text-[10px] text-center">Démo : reception@ocean-a-suites.tn / password123</p>
+        
       </GlassCard>
     </div>
   );
