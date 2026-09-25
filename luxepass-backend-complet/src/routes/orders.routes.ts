@@ -7,7 +7,6 @@ import { pmsStateStore } from "../store/pmsStateStore";
 import { resolveOrderItems } from "../services/catalogPricing";
 import { requireActiveStayWithPayment } from "../utils/requireActiveStay";
 import { publish } from "../events/hotelEventBus";
-import { AppError } from "../utils/errors";
 
 export const ordersRouter = Router();
 
@@ -21,21 +20,15 @@ ordersRouter.post(
 
     // Le prix ne vient jamais du client : {id, qty} seulement, name/price
     // résolus ici depuis le catalogue serveur (même principe que
-    // /payments/create-intent, cf. catalogPricing.ts).
+    // /payments/create-intent). Toute AppError levée par resolveOrderItems
+    // (catalog_unavailable, unknown_item...) remonte à asyncHandler, comme
+    // pour createPaymentIntent dans payments.routes.ts — pas de catch ici.
     const catalog = await pmsStateStore.get(session.hotelId);
-    let resolvedItems;
-    try {
-      resolvedItems = resolveOrderItems({
-        category: req.body.category,
-        items: req.body.items,
-        catalog,
-      });
-    } catch (err) {
-      if (err instanceof AppError) {
-        return res.status(err.statusCode).json({ error: err.code, message: err.message });
-      }
-      throw err;
-    }
+    const resolvedItems = resolveOrderItems({
+      category: req.body.category,
+      items: req.body.items,
+      catalog,
+    });
 
     const order = await ordersStore.create(
       stayId,
