@@ -15,7 +15,8 @@ export default function PoliceRecords() {
   const { t } = useI18n();
   const { digitalActiveStays } = useLiveFeed();
   const [selected, setSelected] = useState(null);
-  const records = digitalActiveStays
+  const records = (digitalActiveStays || [])
+  .filter(s => s.stage === "completed" && s.guestData)
     .filter(s => s.stage === "completed" && s.guestData)
     .map(s => ({
       id: s.stayId,
