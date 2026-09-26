@@ -5,6 +5,7 @@ import GlassCard from "@shared/components/common/GlassCard";
 import GoldBadge from "@shared/components/common/GoldBadge";
 import { useLiveFeed } from "@shared/hooks/useLiveFeed";
 import { useI18n } from "@shared/hooks/useI18n";
+import Modal from "@shared/components/common/Modal";
 
 // Extrait tel quel de LuxePass.jsx — aucun changement de logique, de props ni de nom.
 
@@ -99,5 +100,5 @@ export default function PoliceRecords() {
     </>
     );
   }
-  );
-}
+  
+
