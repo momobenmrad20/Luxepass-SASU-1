@@ -39,4 +39,4 @@ export async function requireCheckinSession(
     next(err);
   }
 }
-identityDocuments IdentityDocument[]
+identityDocument IdentityDocument?
