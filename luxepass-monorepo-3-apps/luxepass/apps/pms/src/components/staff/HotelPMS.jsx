@@ -82,7 +82,7 @@ const activeStayIds = new Set(digitalActiveStays.map(s => s.stayId));
   const guestLabel = (stayId, room) => {
     const s = guestByStay[stayId];
     const name = s?.guestData ? `${s.guestData.firstName} ${s.guestData.lastName}` : "Client";
-    return { name, room: room || s?.room || "—" };
+    return { name, room: s?.room || room || "—" };
   };
   const relativeTime = (iso) => {
     if (!iso) return "";
