@@ -238,3 +238,32 @@ model PmsState {
 
   @@map("pms_state")
 }
+model IdentityDocument {
+  id                   String    @id @default(cuid())
+  checkinSessionId     String    @unique
+  hotelId              String
+
+  encryptedGuestData   String?
+  encryptedSignature   String?
+  encryptionKeyVersion Int       @default(1)
+
+  createdAt            DateTime  @default(now())
+  retentionUntil       DateTime
+  purgedAt             DateTime?
+
+  checkinSession       CheckinSession @relation(fields: [checkinSessionId], references: [id], onDelete: Cascade)
+  hotel                Hotel          @relation(fields: [hotelId], references: [id], onDelete: Cascade)
+
+  @@index([retentionUntil])
+  @@index([hotelId])
+  @@map("identity_documents")
+}
+model CheckinSession {
+  // ... champs existants inchangés ...
+  identityDocument IdentityDocument?
+}
+
+model Hotel {
+  // ... champs existants inchangés ...
+  identityDocuments IdentityDocument[]
+}
