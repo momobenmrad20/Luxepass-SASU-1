@@ -3,9 +3,9 @@ import { Check, ChevronRight, ShieldCheck, Upload } from "lucide-react";
 import { gold } from "@shared/components/common/theme";
 import GlassCard from "@shared/components/common/GlassCard";
 import GoldBadge from "@shared/components/common/GoldBadge";
+import Modal from "@shared/components/common/Modal";
 import { useLiveFeed } from "@shared/hooks/useLiveFeed";
 import { useI18n } from "@shared/hooks/useI18n";
-import Modal from "@shared/components/common/Modal";
 
 // Extrait tel quel de LuxePass.jsx — aucun changement de logique, de props ni de nom.
 
@@ -39,7 +39,7 @@ export default function PoliceRecords() {
       }));
   } catch (e) {
     debugError = e.message;
-              }
+  }
 
   const formatDate = (iso) => {
     try { return new Date(iso).toLocaleString(); } catch { return iso; }
@@ -98,7 +98,5 @@ export default function PoliceRecords() {
       </Modal>
     </div>
     </>
-    );
-  }
-  
-
+  );
+}
