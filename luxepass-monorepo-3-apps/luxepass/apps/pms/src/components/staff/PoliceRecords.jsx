@@ -3,7 +3,6 @@ import { Check, ChevronRight, ShieldCheck, Upload } from "lucide-react";
 import { gold } from "@shared/components/common/theme";
 import GlassCard from "@shared/components/common/GlassCard";
 import GoldBadge from "@shared/components/common/GoldBadge";
-import Modal from "@shared/components/common/Modal";
 import { useAppState } from "@shared/hooks/useAppState";
 import { useI18n } from "@shared/hooks/useI18n";
 
@@ -14,9 +13,26 @@ import { useI18n } from "@shared/hooks/useI18n";
 // ─────────────────────────────────────────────────────────────
 export default function PoliceRecords() {
   const { t } = useI18n();
-  const { appState } = useAppState();
+  const { digitalActiveStays } = useLiveFeed();
   const [selected, setSelected] = useState(null);
-  const records = appState.policeForms || [];
+  const records = digitalActiveStays
+    .filter(s => s.stage === "completed" && s.guestData)
+    .map(s => ({
+      id: s.stayId,
+      firstName: s.guestData.firstName,
+      lastName: s.guestData.lastName,
+      room: s.room || "—",
+      idNumber: s.guestData.idNumber,
+      age: s.guestData.age,
+      gender: s.guestData.gender,
+      profession: s.guestData.profession,
+      from: s.guestData.from,
+      destination: s.guestData.destination,
+      arrival: s.guestData.arrival,
+      departure: s.guestData.departure,
+      hasSignature: !!s.signatureDataUrl,
+      submittedAt: s.completedAt,
+    }));
 
   const formatDate = (iso) => {
     try { return new Date(iso).toLocaleString(); } catch { return iso; }
