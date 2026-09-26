@@ -70,15 +70,16 @@ pmsRouter.get(
     const { hotelId } = req.params;
     const stays = await checkinStore.listActiveStays(hotelId);
     res.json({
-      stays: stays.map((s) => ({
-        stayId: s.stayId,
-        room: s.room ?? null,
-        guestData: s.guestData ?? null,
-        children: s.children ?? [],
-        stage: s.stage, // "completed" (en séjour) | "checked_out"
-        completedAt: s.completedAt,
-      })),
-    });
+  stays: stays.map((s) => ({
+    stayId: s.stayId,
+    room: s.room ?? null,
+    guestData: s.guestData ?? null,
+    children: s.children ?? [],
+    stage: s.stage, // "completed" (en séjour) | "checked_out"
+    completedAt: s.completedAt,
+    signatureDataUrl: s.signatureDataUrl ?? null,   // ← ligne ajoutée
+  })),
+}),
   })
 );
 
