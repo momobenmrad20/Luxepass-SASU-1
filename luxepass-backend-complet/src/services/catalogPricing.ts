@@ -129,7 +129,7 @@ export function resolveOrderItems(input: {
   const lines: ResolvedOrderLine[] = [];
   for (const [id, qty] of qtyById) {
     if (category === "concierge") {
-      lines.push({ id, name: id, price: 0, qty });
+      lines.push({ id, name: "Conciergerie & Bien-être", price: 0, qty });
       continue;
     }
     const entry = byId.get(id);
