@@ -33,7 +33,8 @@ import { getOrSet, invalidate, invalidatePrefix } from "../utils/shortCache";
 import { signStreamToken } from "../utils/jwt";
 import { subscribe as subscribeToHotelEvents, publish } from "../events/hotelEventBus";
 import { catalogueLimiter } from "../middleware/publicRateLimit";
-
+import { identityDocumentStore } from "../store/identityDocumentStore";
+import { mergeGuestDataForDisplay } from "../utils/splitGuestData";
 export const pmsRouter = Router();
 
 // Validation du corps de la nouvelle route d'assignation de chambre —
