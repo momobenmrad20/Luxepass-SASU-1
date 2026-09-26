@@ -101,12 +101,13 @@ const activeStayIds = new Set(digitalActiveStays.map(s => s.stayId));
     .filter(x => x.status === "pending" || x.status === "in_progress")
     .map(x => ({ ...x, room: x.room || guestByStay[x.stayId]?.room || "—", brand: x.equipment, eta: "À évaluer", parts: [], live: true }));
   const liveOrders = (digitalLiveFeed.orders || []).map(o => ({
-    ...o,
-    ...guestLabel(o.stayId, o.room),
-    items: (o.items || []).map(i => `${i.qty}× ${i.name}`),
-    status: ORDER_STATUS_LABEL[o.status] || o.status,
-    rawStatus: o.status,
-  }));
+  ...o,
+  ...guestLabel(o.stayId, o.room),
+  items: (o.items || []).map(i => `${i.qty}× ${i.name}`),
+  status: ORDER_STATUS_LABEL[o.status] || o.status,
+  rawStatus: o.status,
+  time: relativeTime(o.createdAt),
+}));
 
   const resolveTicket = (id) => onResolveTicket?.(id);
   const resolveMaintenance = (id) => onResolveMaintenance?.(id);
