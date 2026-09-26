@@ -77,11 +77,12 @@ pmsRouter.get(
     children: s.children ?? [],
     stage: s.stage, // "completed" (en séjour) | "checked_out"
     completedAt: s.completedAt,
-    signatureDataUrl: s.signatureDataUrl ?? null,   // ← ligne ajoutée
-  })),
-}),
-);
+    signatureDataUrl: s.signatureDataUrl ?? null,   // ← ligne ajouté
 
+})),
+    });
+  })
+);
 // POST /hotels/:hotelId/stays/:stayId/checkout — check-out digital déclenché
 // par la réception. Existe car POST /stays/:stayId/checkout exige désormais
 // le stayToken du CLIENT (ACTION 1, PHASE 0), que le staff ne possède pas.
