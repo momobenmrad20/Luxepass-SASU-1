@@ -80,7 +80,6 @@ pmsRouter.get(
     signatureDataUrl: s.signatureDataUrl ?? null,   // ← ligne ajoutée
   })),
 }),
-  })
 );
 
 // POST /hotels/:hotelId/stays/:stayId/checkout — check-out digital déclenché
