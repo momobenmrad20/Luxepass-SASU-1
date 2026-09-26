@@ -96,5 +96,8 @@ export default function PoliceRecords() {
         )}
       </Modal>
     </div>
+    </>
+    );
+  }
   );
 }
