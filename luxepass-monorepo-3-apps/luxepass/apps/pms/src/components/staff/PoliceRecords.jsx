@@ -15,30 +15,38 @@ export default function PoliceRecords() {
   const { t } = useI18n();
   const { digitalActiveStays } = useLiveFeed();
   const [selected, setSelected] = useState(null);
-  const records = (digitalActiveStays || [])
-    .filter(s => s.stage === "completed" && s.guestData)
-    .map(s => ({
-      id: s.stayId,
-      firstName: s.guestData.firstName,
-      lastName: s.guestData.lastName,
-      room: s.room || "—",
-      idNumber: s.guestData.idNumber,
-      age: s.guestData.age,
-      gender: s.guestData.gender,
-      profession: s.guestData.profession,
-      from: s.guestData.from,
-      destination: s.guestData.destination,
-      arrival: s.guestData.arrival,
-      departure: s.guestData.departure,
-      hasSignature: !!s.signatureDataUrl,
-      submittedAt: s.completedAt,
-    }));
+  let records = [];
+  let debugError = null;
+  try {
+    records = (digitalActiveStays || [])
+      .filter(s => s.stage === "completed" && s.guestData)
+      .map(s => ({
+        id: s.stayId,
+        firstName: s.guestData.firstName,
+        lastName: s.guestData.lastName,
+        room: s.room || "—",
+        idNumber: s.guestData.idNumber,
+        age: s.guestData.age,
+        gender: s.guestData.gender,
+        profession: s.guestData.profession,
+        from: s.guestData.from,
+        destination: s.guestData.destination,
+        arrival: s.guestData.arrival,
+        departure: s.guestData.departure,
+        hasSignature: !!s.signatureDataUrl,
+        submittedAt: s.completedAt,
+      }));
+  } catch (e) {
+    debugError = e.message;
+              }
 
   const formatDate = (iso) => {
     try { return new Date(iso).toLocaleString(); } catch { return iso; }
   };
 
   return (
+    <>
+    {debugError && (<div style={{ background: "red", color: "white", padding: 16 }}>ERREUR : {debugError}</div>)}
     <div className="space-y-4">
       <div>
         <h3 className="text-white font-semibold flex items-center gap-2"><ShieldCheck size={16} style={{ color: gold }} />{t.policeRecords}</h3>
