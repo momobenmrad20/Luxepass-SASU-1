@@ -17,6 +17,8 @@ import {
   staffIdParamsSchema,
 } from "../schemas";
 import { checkinStore } from "../store/checkinStore";
+import { identityDocumentStore } from "../store/identityDocumentStore";
+import { mergeGuestDataForDisplay } from "../utils/splitGuestData";
 import { serviceRequestsStore } from "../store/serviceRequestsStore";
 import { maintenanceStore } from "../store/maintenanceStore";
 import { ordersStore } from "../store/ordersStore";
@@ -33,8 +35,8 @@ import { getOrSet, invalidate, invalidatePrefix } from "../utils/shortCache";
 import { signStreamToken } from "../utils/jwt";
 import { subscribe as subscribeToHotelEvents, publish } from "../events/hotelEventBus";
 import { catalogueLimiter } from "../middleware/publicRateLimit";
-import { identityDocumentStore } from "../store/identityDocumentStore";
-import { mergeGuestDataForDisplay } from "../utils/splitGuestData";
+
+
 export const pmsRouter = Router();
 
 // Validation du corps de la nouvelle route d'assignation de chambre —
@@ -396,25 +398,33 @@ pmsRouter.patch(
 
 // GET /hotels/:hotelId/staff
 pmsRouter.get(
-  "/hotels/:hotelId/staff",
+  "/hotels/:hotelId/active-stays",
   requireStaffAuth,
   requireSameHotel("hotelId"),
-  requireRole("gm", "super_admin"),
+  requireRole("reception", "gm", "super_admin"),
   validate({ params: hotelIdParamsSchema }),
   asyncHandler(async (req, res) => {
     const { hotelId } = req.params;
-    const staffList = await staffStore.listByHotel(hotelId);
-    res.json({
-      staff: staffList.map((s) => ({
-        id: s.id,
-        email: s.email,
-        role: s.role,
-        name: s.name ?? null,
-      })),
-    });
+    const stays = await checkinStore.listActiveStays(hotelId);
+
+    const staysWithIdentity = await Promise.all(
+      stays.map(async (s) => {
+        const identity = await identityDocumentStore.getDecrypted(s.id);
+        return {
+          stayId: s.stayId,
+          room: s.room ?? null,
+          guestData: mergeGuestDataForDisplay(s.guestData, identity?.sensitiveGuestData),
+          children: s.children ?? [],
+          stage: s.stage,
+          completedAt: s.completedAt,
+          signatureDataUrl: identity?.signatureDataUrl ?? null,
+        };
+      })
+    );
+
+    res.json({ stays: staysWithIdentity });
   })
 );
-
 // POST /hotels/:hotelId/staff
 pmsRouter.post(
   "/hotels/:hotelId/staff",
