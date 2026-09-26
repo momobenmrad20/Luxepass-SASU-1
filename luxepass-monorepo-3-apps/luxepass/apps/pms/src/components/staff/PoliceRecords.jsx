@@ -3,7 +3,7 @@ import { Check, ChevronRight, ShieldCheck, Upload } from "lucide-react";
 import { gold } from "@shared/components/common/theme";
 import GlassCard from "@shared/components/common/GlassCard";
 import GoldBadge from "@shared/components/common/GoldBadge";
-import { useAppState } from "@shared/hooks/useAppState";
+import { useLiveFeed } from "@shared/hooks/useLiveFeed";
 import { useI18n } from "@shared/hooks/useI18n";
 
 // Extrait tel quel de LuxePass.jsx — aucun changement de logique, de props ni de nom.
